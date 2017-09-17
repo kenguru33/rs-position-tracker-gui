@@ -3,7 +3,7 @@
     <v-layout row wrap dark>
       <v-flex xs12>
         <v-expansion-panel popout>
-          <v-expansion-panel-content v-for="(vessel,i) in movingVessels" :key="i" @click.native.stop="reloadMap(vessel, $event)">
+          <v-expansion-panel-content v-for="(vessel, i) in movingVessels" :key="vessel.MMSI" @click.native.stop="reloadMap(vessel, $event)">
             <div slot="header">
               <v-list-tile avatar>
               <v-list-tile-avatar>
@@ -38,8 +38,9 @@
                               :draggable="true"
                               @click="center=m.position"
                             ></gmap-marker>
-                            <gmap-polygon :paths="paths">
-                            </gmap-polygon>
+                            <gmap-polyline
+                              :path="paths">
+                            </gmap-polyline>
                           </gmap-map>
                       </v-card>
                     </v-flex>
@@ -51,8 +52,9 @@
                             </v-card-media>
                             <v-card-title primary-title>
                               <div>
-                                <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+                                <h3 class="headline mb-0">{{vessel.Ship_name}}</h3>
+                                <div>SOG: {{vessel.SOG}} knots<br>COG: {{vessel.COG}}°</div>
+                                <div>Latitude: {{vessel.Latitude}} Longitude: {{vessel.Longitude}}</div>
                               </div>
                             </v-card-title>
                             <v-card-actions>
@@ -105,11 +107,13 @@
         center: {lat: 0, lng: 0},
         markers: [],
         vessels: [],
-        paths: []
+        paths: [],
+        selectedVessel: null
       }
     },
     methods: {
       reloadMap: function (vessel, event) {
+        this.selectedVessel = vessel
         let positions = vessel.Long_Lat_Time.split(',')
         positions = positions.filter((value, index) => {
           return (index + 1) % 3
@@ -124,14 +128,18 @@
           i = i + 1
         }
         Vue.$gmapDefaultResizeBus.$emit('resize')
+        console.log('map resized')
       }
     },
     computed: {
       movingVessels: function () {
         return this.vessels.filter(vessel => {
-          return vessel.SOG > 0
+          return vessel.SOG > 1
         })
       }
+    },
+    watch: {
+      'selectedVessel.Latitude': () => { this.reloadMap(this.selectedVessel, null) }
     },
     created () {
       this.$http.get('http://ais.rs.no/aktive.json')
@@ -143,7 +151,9 @@
         this.$http.get('http://ais.rs.no/aktive.json')
           .then(vessels => {
             this.vessels = vessels.data
-            Vue.$gmapDefaultResizeBus.$emit('resize')
+            if (this.selectedVessel) {
+              this.reloadMap(this.selectedVessel)
+            }
           })
       }, 5000)
     }
