@@ -3,7 +3,7 @@
     <v-layout row wrap dark>
       <v-flex xs12>
         <v-expansion-panel popout>
-          <v-expansion-panel-content v-for="(vessel, i) in movingVessels" :key="vessel.MMSI" @click.native.stop="reloadMap(vessel, $event)">
+          <v-expansion-panel-content v-for="(vessel, i) in movingVessels" :key="vessel.MMSI" @click.native="reloadMap(vessel)">
             <div slot="header">
               <v-list-tile avatar>
               <v-list-tile-avatar>
@@ -14,7 +14,7 @@
                   {{vessel.Ship_name}}
                 </v-list-tile-title>
                 <v-list-tile-sub-title>
-                  {{vessel.Call_sign}}
+                  {{vessel.MMSI}}
                 </v-list-tile-sub-title>
               </v-list-tile-content>
               </v-list-tile>
@@ -23,12 +23,34 @@
               <v-card-text class="grey lighten-3">
                 <v-container fluid grid-list-md>
                   <v-layout row wrap>
-                    <v-flex d-flex xs12 sm6 md6>
+                    <v-flex d-flex xs12 sm12 md6>
+                      <v-layout row wrap>
+                        <v-flex d-flex>
+                          <v-card>
+                            <v-card-media :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" height="200px">
+                            </v-card-media>
+                            <v-card-title primary-title>
+                              <div>
+                                <h3 class="headline mb-0">{{vessel.Ship_name}}</h3>
+                                <div>SOG: {{vessel.SOG}} knots - COG: {{vessel.COG}}°</div>
+                                <div>Latitude: {{vessel.Latitude}} Longitude: {{vessel.Longitude}}</div>
+                                <div>Last updated: {{new Date(vessel.Time_stamp).toLocaleString()}}</div>
+                              </div>
+                            </v-card-title>
+                            <v-card-actions>
+                              <v-btn flat class="orange--text">Share</v-btn>
+                              <v-btn flat class="orange--text" @click="showMap=!showMap">Toggle Map</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex d-flex xs12 sm12 md6>
                       <v-card>
                           <gmap-map
                             :center="center"
                             :zoom="12"
-                            style="width: 100%; min-height: 100%">
+                            style="width: 100%; min-height: 400px">
                             <gmap-marker
                               :key="index"
                               v-for="(m, index) in markers"
@@ -44,41 +66,17 @@
                           </gmap-map>
                       </v-card>
                     </v-flex>
-                    <v-flex d-flex xs12 sm6 md6>
-                      <v-layout row wrap>
-                        <v-flex d-flex>
-                          <v-card>
-                            <v-card-media :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" height="200px">
-                            </v-card-media>
-                            <v-card-title primary-title>
-                              <div>
-                                <h3 class="headline mb-0">{{vessel.Ship_name}}</h3>
-                                <div>SOG: {{vessel.SOG}} knots<br>COG: {{vessel.COG}}°</div>
-                                <div>Latitude: {{vessel.Latitude}} Longitude: {{vessel.Longitude}}</div>
-                              </div>
-                            </v-card-title>
-                            <v-card-actions>
-                              <v-btn flat class="orange--text">Share</v-btn>
-                              <v-btn flat class="orange--text">Explore</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-flex>
-                      </v-layout>
-                    </v-flex>
                     <v-flex d-flex xs12 sm12 md12 child-flex>
                       <v-card class="indigo">
                         <div class="text-xs-center">
+                          <v-btn fab small dark class="teal">
+                            <v-icon dark>list</v-icon>
+                          </v-btn>
                           <v-btn fab small dark primary>
                             <v-icon dark>remove</v-icon>
                           </v-btn>
-                          <v-btn fab small dark class="pink">
-                            <v-icon dark>favorite</v-icon>
-                          </v-btn>
                           <v-btn fab small dark class="indigo">
                             <v-icon dark>add</v-icon>
-                          </v-btn>
-                          <v-btn fab small dark class="teal">
-                            <v-icon dark>list</v-icon>
                           </v-btn>
                           <v-btn fab small dark class="cyan">
                             <v-icon dark>edit</v-icon>
@@ -94,6 +92,21 @@
         </v-expansion-panel>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      :timeout="timeout"
+      :success="context === 'success'"
+      :info="context === 'info'"
+      :warning="context === 'warning'"
+      :error="context === 'error'"
+      :primary="context === 'primary'"
+      :secondary="context === 'secondary'"
+      :multi-line="mode === 'multi-line'"
+      :vertical="mode === 'vertical'"
+      v-model="snackbar"
+    >
+      {{ text }}
+      <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -102,17 +115,21 @@
   export default {
     data () {
       return {
-        lorem: 'AIS DATA goes here',
         imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
         center: {lat: 0, lng: 0},
         markers: [],
         vessels: [],
         paths: [],
-        selectedVessel: null
+        selectedVessel: null,
+        snackbar: false,
+        context: '',
+        mode: '',
+        timeout: 3000,
+        text: ''
       }
     },
     methods: {
-      reloadMap: function (vessel, event) {
+      reloadMap: function (vessel) {
         this.selectedVessel = vessel
         let positions = vessel.Long_Lat_Time.split(',')
         positions = positions.filter((value, index) => {
@@ -123,12 +140,10 @@
         }]
         this.center = {lat: parseFloat(positions[1]), lng: parseFloat(positions[0])}
         this.paths = []
-        for (let i = 0; i < positions.length; i++) {
+        for (let i = 0; i < positions.length; i += 2) {
           this.paths.push({lat: parseFloat(positions[i + 1]), lng: parseFloat(positions[i])})
-          i = i + 1
         }
         Vue.$gmapDefaultResizeBus.$emit('resize')
-        console.log('map resized')
       }
     },
     computed: {
@@ -139,7 +154,26 @@
       }
     },
     watch: {
-      'selectedVessel.Latitude': () => { this.reloadMap(this.selectedVessel, null) }
+      'vessels': function () {
+        if (!this.selectedVessel) {
+          return
+        }
+        let vessel = this.vessels.find(v => {
+          return v.MMSI === this.selectedVessel.MMSI
+        })
+        if (vessel.Time_stamp !== this.selectedVessel.Time_stamp) {
+          this.reloadMap(vessel)
+          if (this.selectedVessel.SOG < 1) {
+            this.snackbar = true
+            this.text = this.selectedVessel.Ship_name + ' has stopped!'
+            this.context = 'warning'
+          } else {
+            this.snackbar = true
+            this.text = this.selectedVessel.Ship_name + ' updated info!'
+            this.context = 'primary'
+          }
+        }
+      }
     },
     created () {
       this.$http.get('http://ais.rs.no/aktive.json')
@@ -151,9 +185,6 @@
         this.$http.get('http://ais.rs.no/aktive.json')
           .then(vessels => {
             this.vessels = vessels.data
-            if (this.selectedVessel) {
-              this.reloadMap(this.selectedVessel)
-            }
           })
       }, 5000)
     }
