@@ -161,13 +161,13 @@
       }
     },
     created () {
-      this.$http.get('http://ais.rs.no/aktive.json')
+      this.$http.get('https://ais.rs.no/aktive.json')
         .then(vessels => {
           this.vessels = vessels.data
         })
       setInterval(() => {
         console.log('update intervall')
-        this.$http.get('http://ais.rs.no/aktive.json')
+        this.$http.get('https://ais.rs.no/aktive.json')
           .then(vessels => {
             this.vessels = vessels.data
           })
