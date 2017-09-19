@@ -1,6 +1,6 @@
-# yt-devmeetup-vue
+# rs-position-tracker-gui
 
-> A dev meetup built with Vue + Vuetify + Firebase
+> GUI for comsuming rs-position-tracker api
 
 ## Build Setup
 
