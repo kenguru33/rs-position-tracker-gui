@@ -47,23 +47,7 @@
                     </v-flex>
                     <v-flex d-flex xs12 sm12 md6>
                       <v-card>
-                          <gmap-map
-                            :center="center"
-                            :zoom="12"
-                            style="width: 100%; min-height: 400px">
-                            <gmap-marker
-                              :key="index"
-                              v-for="(m, index) in markers"
-                              :position="m.position"
-                              :icon="m.icon"
-                              :clickable="true"
-                              :draggable="true"
-                              @click="center=m.position"
-                            ></gmap-marker>
-                            <gmap-polyline
-                              :path="paths">
-                            </gmap-polyline>
-                          </gmap-map>
+                        <sea-map :name="vessel.MMSI"></sea-map>
                       </v-card>
                     </v-flex>
                   </v-layout>
@@ -89,6 +73,7 @@
       {{ text }}
       <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <sea-map></sea-map>
   </v-container>
 </template>
 

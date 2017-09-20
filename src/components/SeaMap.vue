@@ -5,17 +5,31 @@
 </template>
 <script>
   import GoogleMapsLoader from 'google-maps'
+  import uuid from 'uuid/v1'
   export default {
     name: 'sea-map',
-    props: ['name'],
+    props: {
+      name: {
+        default: 'seamap-' + uuid(),
+        type: String
+      },
+      zoom: {
+        default: 6,
+        type: Number
+      },
+      center: {
+        default: function () {
+          return { lat: 60, lng: 10 }
+        }
+      }
+    },
     data () {
       return {
-        mapName: this.mapName || 'seamap',
+        mapName: this.name || 'seamap',
         map: null
       }
     },
     mounted: function () {
-      console.log('outside', this)
       GoogleMapsLoader.KEY = 'AIzaSyCCFWll4oEjXml1BVeZ3-x1TZphNVx8yko'
       GoogleMapsLoader.onLoad(function (google) {
         console.log('I just loaded google maps api')
@@ -23,8 +37,8 @@
       GoogleMapsLoader.load((google) => {
         const el = document.getElementById(this.mapName)
         const options = {
-          zoom: 10,
-          center: new google.maps.LatLng(60, 11)
+          zoom: this.zoom,
+          center: new google.maps.LatLng(this.center)
         }
         this.map = new google.maps.Map(el, options)
       })
