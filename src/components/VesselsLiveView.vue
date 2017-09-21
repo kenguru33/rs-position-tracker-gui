@@ -47,7 +47,7 @@
                     </v-flex>
                     <v-flex d-flex xs12 sm12 md6>
                       <v-card>
-                        <sea-map :name="vessel.MMSI"></sea-map>
+                        <sea-map :name="vessel.MMSI" :center="center"></sea-map>
                       </v-card>
                     </v-flex>
                   </v-layout>
@@ -73,12 +73,10 @@
       {{ text }}
       <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-    <sea-map></sea-map>
   </v-container>
 </template>
 
 <script>
-  import Vue from 'vue'
   export default {
     props: [
       'onlyMovingVessels'
@@ -100,25 +98,10 @@
     },
     methods: {
       reloadMap: function (vessel) {
-        this.selectedVessel = vessel
-        let positions = vessel.Long_Lat_Time.split(',')
-        positions = positions.filter((value, index) => {
-          return (index + 1) % 3
-        })
-        this.markers = [{
-          position: {lat: parseFloat(positions[1]), lng: parseFloat(positions[0])}
-        }]
-        this.center = {lat: parseFloat(positions[1]), lng: parseFloat(positions[0])}
-        this.paths = []
-        for (let i = 0; i < positions.length; i += 2) {
-          this.paths.push({lat: parseFloat(positions[i + 1]), lng: parseFloat(positions[i])})
-        }
-        Vue.$gmapDefaultResizeBus.$emit('resize')
-      },
-      showMsgBox (text, context) {
-        this.text = text
-        this.context = context
-        this.snackbar = true
+        const positions = vessel.Long_Lat_Time.split(',')
+        console.log({lat: positions[1], lng: positions[0]})
+        this.center = {lat: vessel.Long_Lat_Time[1], lng: vessel.Long_Lat_Time[0]}
+        console.log(this.center)
       }
     },
     computed: {
