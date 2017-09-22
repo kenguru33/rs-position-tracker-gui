@@ -3,7 +3,7 @@
     <v-layout row wrap dark>
       <v-flex xs12>
         <v-expansion-panel popout>
-          <v-expansion-panel-content v-for="(vessel, i) in movingVessels" :key="vessel.MMSI" @click.native="reloadMap(vessel)">
+          <v-expansion-panel-content v-for="(vessel, i) in vessels" :key="vessel.MMSI" @click.native="selectVessel(vessel)">
             <div slot="header">
               <v-list-tile avatar>
               <v-list-tile-avatar>
@@ -19,60 +19,10 @@
               </v-list-tile-content>
               </v-list-tile>
             </div>
-            <v-card>
-              <v-card-text class="grey lighten-3">
-                <v-container fluid grid-list-md>
-                  <v-layout row wrap>
-                    <v-flex d-flex xs12 sm12 md6>
-                      <v-layout row wrap>
-                        <v-flex d-flex>
-                          <v-card>
-                            <v-card-media :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" height="200px">
-                            </v-card-media>
-                            <v-card-title primary-title>
-                              <div>
-                                <h3 class="headline mb-0">{{vessel.Ship_name}}</h3>
-                                <div>SOG: {{vessel.SOG}} knots - COG: {{vessel.COG}}°</div>
-                                <div>Latitude: {{vessel.Latitude}} Longitude: {{vessel.Longitude}}</div>
-                                <div>Last updated: {{new Date(vessel.Time_stamp).toLocaleString()}}</div>
-                              </div>
-                            </v-card-title>
-                            <v-card-actions>
-                              <v-btn flat class="orange--text">Share</v-btn>
-                              <v-btn flat class="orange--text" @click="showMap=!showMap">Toggle Map</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-flex>
-                      </v-layout>
-                    </v-flex>
-                    <v-flex d-flex xs12 sm12 md6>
-                      <v-card>
-                        <sea-map :name="vessel.MMSI" :center="center"></sea-map>
-                      </v-card>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card-text>
-            </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-flex>
     </v-layout>
-    <v-snackbar
-      :timeout="timeout"
-      :success="context === 'success'"
-      :info="context === 'info'"
-      :warning="context === 'warning'"
-      :error="context === 'error'"
-      :primary="context === 'primary'"
-      :secondary="context === 'secondary'"
-      :multi-line="mode === 'multi-line'"
-      :vertical="mode === 'vertical'"
-      v-model="snackbar"
-    >
-      {{ text }}
-      <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -88,60 +38,20 @@
         markers: [],
         vessels: [],
         paths: [],
-        selectedVessel: null,
-        snackbar: false,
-        context: '',
-        mode: '',
-        timeout: 3000,
-        text: ''
+        selectedVessel: null
       }
     },
     methods: {
-      reloadMap: function (vessel) {
-        const positions = vessel.Long_Lat_Time.split(',')
-        console.log({lat: positions[1], lng: positions[0]})
-        this.center = {lat: vessel.Long_Lat_Time[1], lng: vessel.Long_Lat_Time[0]}
-        console.log(this.center)
-      }
-    },
-    computed: {
-      movingVessels: function () {
-        if (!this.onlyMovingVessels) {
-          return this.vessels
-        }
-        return this.vessels.filter(vessel => {
-          return isVesselMoving(vessel)
-        })
-      }
-    },
-    watch: {
-      'vessels': function () {
-        if (!this.selectedVessel) {
-          return
-        }
-        let vessel = this.vessels.find(v => {
-          return v.MMSI === this.selectedVessel.MMSI
-        })
-        if (vessel.Time_stamp !== this.selectedVessel.Time_stamp) {
-          this.reloadMap(vessel)
-          isVesselMoving(this.selectedVessel) ? this.showMsgBox(this.selectedVessel.Ship_name + ': info updated', 'info') : this.showMsgBox(this.selectedVessel.Ship_name + ' has stopped!', 'error')
-        }
+      selectVessel: function (vessel) {
       }
     },
     created () {
+      console.log('created')
       this.$http.get('https://ais.rs.no/aktive.json')
         .then(vessels => {
+          console.log(vessels.data)
           this.vessels = vessels.data
         })
-      setInterval(() => {
-        this.$http.get('https://ais.rs.no/aktive.json')
-          .then(vessels => {
-            this.vessels = vessels.data
-          })
-      }, 5000)
     }
-  }
-  const isVesselMoving = function (vessel) {
-    return vessel.SOG > 1
   }
 </script>
