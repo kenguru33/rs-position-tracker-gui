@@ -12,12 +12,7 @@
                     <img :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" alt=""/>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
-                    <v-list-tile-title>
-                      {{vessel.Ship_name}}
-                    </v-list-tile-title>
-                    <v-list-tile-sub-title>
-                      {{vessel.MMSI}}
-                    </v-list-tile-sub-title>
+                    {{vessel.Ship_name}}
                   </v-list-tile-content>
                 </v-list-tile>
               </div>
@@ -54,14 +49,4 @@
     }
   }
 </script>
-<style scoped> 
-img:before {
-    content: ' ';
-    display: block;
-    position: absolute;
-    height: 44px;
-    width: 44px;
-    background-color: lightgray;
-    border-radius: 50%
-}
-</style>
+

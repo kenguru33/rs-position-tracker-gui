@@ -37,8 +37,7 @@
     data () {
       return {
         mapName: this.vessel.MMSI + '-map',
-        map: null,
-        marker: null
+        map: null
       }
     },
     computed: {
@@ -51,6 +50,17 @@
           lng: parseFloat(coords[0]),
           lat: parseFloat(coords[1])
         }
+      },
+      positions: function () {
+        let positions = this.vessel.Long_Lat_Time.split(',')
+        positions = positions.filter((value, index) => {
+          return (index + 1) % 3
+        })
+        const p = []
+        for (let i = 0; i < positions.length; i += 2) {
+          p.push({lat: parseFloat(positions[i + 1]), lng: parseFloat(positions[i])})
+        }
+        return p
       }
     },
     watch: {
@@ -100,10 +110,19 @@
           fullscreenControl: true
         }
         this.map = new google.maps.Map(el, options)
-        this.marker = new google.maps.Marker({
+        /* eslint-disable no-new */
+        new google.maps.Marker({
           position: new google.maps.LatLng(this.position.lat, this.position.lng),
           map: this.map,
           title: this.vessel.Ship_name
+        })
+        new google.maps.Polyline({
+          path: this.positions,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          map: this.map
         })
         this.moveToCenter()
       })

@@ -12,6 +12,7 @@
                   <v-card-title primary-title>
                     <div>
                       <h3 class="headline mb-0">{{vessel.Ship_name}}</h3>
+                      <div>MMSI: {{vessel.MMSI}}</div>
                       <div>SOG: {{vessel.SOG}} knots - COG: {{vessel.COG}}°</div>
                       <div>Latitude: {{vessel.Latitude}} Longitude: {{vessel.Longitude}}</div>
                       <div>Last updated: {{new Date(vessel.Time_stamp).toLocaleString()}}</div>
@@ -63,7 +64,6 @@
     },
     watch: {
       'selectedVessel': function () {
-        // console.log('from vesselview', this.selectedVessel)
       }
     }
   }
