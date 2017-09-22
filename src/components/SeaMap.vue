@@ -37,7 +37,8 @@
     data () {
       return {
         mapName: this.vessel.MMSI + '-map',
-        map: null
+        map: null,
+        marker: null
       }
     },
     computed: {
@@ -91,16 +92,19 @@
         const options = {
           zoom: this.zoom,
           center: new google.maps.LatLng(this.position.lat, this.position.lng),
-          disableDefaultUI: true
+          zoomControl: true,
+          mapTypeControl: false,
+          scaleControl: false,
+          streetViewControl: false,
+          rotateControl: false,
+          fullscreenControl: true
         }
         this.map = new google.maps.Map(el, options)
-        const marker = new google.maps.Marker({
+        this.marker = new google.maps.Marker({
           position: new google.maps.LatLng(this.position.lat, this.position.lng),
           map: this.map,
           title: this.vessel.Ship_name
         })
-        console.log(marker)
-        // console.log(new SeaMapType(google))
         this.moveToCenter()
       })
     }

@@ -9,7 +9,7 @@
               <div slot="header">
                 <v-list-tile avatar>
                   <v-list-tile-avatar>
-                    <img :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" />
+                    <img :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" alt=""/>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
                     <v-list-tile-title>
@@ -54,3 +54,14 @@
     }
   }
 </script>
+<style scoped> 
+img:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    height: 44px;
+    width: 44px;
+    background-color: lightgray;
+    border-radius: 50%
+}
+</style>
