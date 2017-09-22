@@ -19,7 +19,7 @@
                   </v-card-title>
                   <v-card-actions>
                     <v-btn flat class="orange--text">Share</v-btn>
-                    <v-btn flat class="orange--text">Toggle Map</v-btn>
+                    <v-btn flat class="orange--text" @click="showSeaMap=!showSeaMap">Toggle SeaMap</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -27,7 +27,7 @@
           </v-flex>
           <v-flex d-flex xs12 sm12 md6>
             <v-card>
-              <sea-map :vessel="vessel" :isSelected="isSelected"></sea-map>
+              <sea-map :vessel="vessel" :selectedVessel="selectedVessel" :showSeaMap="showSeaMap" ></sea-map>
             </v-card>
           </v-flex>
         </v-layout>
@@ -41,11 +41,12 @@
     name: 'vessel-view',
     props: {
       vessel: null,
-      isSelected: false
+      selectedVessel: null
     },
     data: () => {
       return {
-        imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images'
+        imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
+        showSeaMap: false
       }
     },
     computed: {
@@ -61,8 +62,8 @@
       }
     },
     watch: {
-      'isSelected': function () {
-        console.log('selected:', this.isSelected)
+      'selectedVessel': function () {
+        // console.log('from vesselview', this.selectedVessel)
       }
     }
   }

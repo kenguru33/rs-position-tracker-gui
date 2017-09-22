@@ -24,10 +24,14 @@
     name: 'sea-map',
     props: {
       vessel: null,
-      isSelected: false,
+      selectedVessel: null,
       zoom: {
         default: 10,
         type: Number
+      },
+      showSeaMap: {
+        defualt: false,
+        type: Boolean
       }
     },
     data () {
@@ -49,16 +53,32 @@
       }
     },
     watch: {
-      'isSelected': function () {
-        console.log('resizeing map')
-        this.moveTo()
+      'selectedVessel': function () {
+        if (this.selectedVessel.MMSI === this.vessel.MMSI) {
+          this.moveToCenter()
+        }
+      },
+      'showSeaMap': function () {
+        this.toggleSeaMap()
       }
     },
     methods: {
-      moveTo () {
+      moveToCenter () {
+        // console.log('resize map', this.selectedVessel.MMSI)
         const centerPos = new window.google.maps.LatLng(this.position.lat, this.position.lng)
         window.google.maps.event.trigger(this.map, 'resize')
-        this.map.panTo(centerPos)
+        if (centerPos) {
+          this.map.panTo(centerPos)
+        }
+      },
+      toggleSeaMap () {
+        if (this.showSeaMap) {
+          this.map.mapTypes.set('sjokartraster', new SeaMapType(window.google))
+          this.map.setMapTypeId('sjokartraster')
+        } else {
+          console.log('removing overlay')
+          this.map.setMapTypeId('roadmap')
+        }
       }
     },
     mounted: function () {
@@ -70,7 +90,8 @@
         const el = document.getElementById(this.mapName)
         const options = {
           zoom: this.zoom,
-          center: new google.maps.LatLng(this.position.lat, this.position.lng)
+          center: new google.maps.LatLng(this.position.lat, this.position.lng),
+          disableDefaultUI: true
         }
         this.map = new google.maps.Map(el, options)
         const marker = new google.maps.Marker({
@@ -80,9 +101,7 @@
         })
         console.log(marker)
         // console.log(new SeaMapType(google))
-        this.moveTo()
-        this.map.mapTypes.set('sjokartraster', new SeaMapType(google))
-        this.map.setMapTypeId('sjokartraster')
+        this.moveToCenter()
       })
     }
   }
@@ -90,7 +109,7 @@
 
 <style scoped>
 .google-map {
-  width: 400px;
+  width: 100%;
   height: 400px;
   margin: 0 auto;
   background: gray;

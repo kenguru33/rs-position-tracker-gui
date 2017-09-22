@@ -34,7 +34,7 @@
     <main>
       <v-container fluid>
         <!--v-router-->
-        <router-view :onlyMovingVessels="onlyMovingVessels"></router-view>
+        <router-view :filterMovingVessels="filterMovingVessels"></router-view>
       </v-container>
     </main>
     <div class="text-xs-center">
@@ -42,7 +42,7 @@
       <v-list>
         <v-subheader>Options</v-subheader>
         <v-list-tile>
-          <v-switch label="filter moving vessels" v-model="onlyMovingVessels"></v-switch>
+          <v-switch label="filter moving vessels" v-model="filterMovingVessels"></v-switch>
         </v-list-tile>
       </v-list>
     </v-bottom-sheet>
@@ -61,7 +61,7 @@ export default {
         { title: 'Location View', icon: 'location_on' }
       ],
       sheetVisable: false,
-      onlyMovingVessels: true
+      filterMovingVessels: false
     }
   }
 }

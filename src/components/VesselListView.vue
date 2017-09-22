@@ -3,7 +3,9 @@
       <v-layout row wrap dark>
         <v-flex xs12>
           <v-expansion-panel popout>
-            <v-expansion-panel-content v-for="(vessel, i) in vessels" :key="vessel.MMSI" @click.native="isSelected=!isSelected">
+            <v-expansion-panel-content v-for="(vessel, i) in vessels" :key="vessel.MMSI" 
+            @click.native="selectedVessel=vessel" 
+            v-show="isVesselMoving(vessel) || !filterMovingVessels">
               <div slot="header">
                 <v-list-tile avatar>
                   <v-list-tile-avatar>
@@ -19,7 +21,7 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </div>
-              <vessel-view :vessel="vessel" :isSelected="isSelected"></vessel-view>
+              <vessel-view :vessel="vessel" :selectedVessel="selectedVessel"></vessel-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-flex>
@@ -31,11 +33,17 @@
 
   export default {
     components: {VesselView},
+    props: ['filterMovingVessels'],
     data () {
       return {
         vessels: [],
         imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
-        isSelected: false
+        selectedVessel: null
+      }
+    },
+    methods: {
+      isVesselMoving: function (vessel) {
+        return vessel.SOG > 1
       }
     },
     created () {
