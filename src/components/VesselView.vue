@@ -19,7 +19,7 @@
                     </div>
                   </v-card-title>
                   <v-card-actions>
-                    <v-btn flat class="orange--text">Share</v-btn>
+                    <v-spacer></v-spacer>
                     <v-btn flat class="orange--text" @click="showSeaMap=!showSeaMap">Toggle SeaMap</v-btn>
                   </v-card-actions>
                 </v-card>

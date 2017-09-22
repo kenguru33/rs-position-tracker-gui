@@ -46,6 +46,12 @@
         .then(vessels => {
           this.vessels = vessels.data
         })
+      setInterval(() => {
+        this.$http.get('https://ais.rs.no/aktive.json')
+        .then(vessels => {
+          this.vessels = vessels.data
+        })
+      }, 5000)
     }
   }
 </script>

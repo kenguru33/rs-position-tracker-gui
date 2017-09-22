@@ -87,7 +87,6 @@
           this.map.mapTypes.set('sjokartraster', new SeaMapType(window.google))
           this.map.setMapTypeId('sjokartraster')
         } else {
-          console.log('removing overlay')
           this.map.setMapTypeId('roadmap')
         }
       }
@@ -133,7 +132,7 @@
 <style scoped>
 .google-map {
   width: 100%;
-  height: 400px;
+  height: 420px;
   margin: 0 auto;
   background: gray;
 }
