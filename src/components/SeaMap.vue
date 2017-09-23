@@ -37,7 +37,9 @@
     data () {
       return {
         mapName: this.vessel.MMSI + '-map',
-        map: null
+        map: null,
+        marker: null,
+        path: []
       }
     },
     computed: {
@@ -64,6 +66,9 @@
       }
     },
     watch: {
+      'vessel': function () {
+        this.moveToCenter()
+      },
       'selectedVessel': function () {
         if (this.selectedVessel.MMSI === this.vessel.MMSI) {
           this.moveToCenter()
