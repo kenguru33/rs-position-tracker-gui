@@ -3,6 +3,71 @@
   <div class="google-map" :id="mapName">
     <p>Map is loading...</p>
   </div>
+  <v-btn
+    class="pink" id="zoomup"
+    v-tooltip:left="{ html: 'Zoom In' }"
+    @click="zoom++"
+    dark
+    small
+    absolute
+    bottom
+    right
+    fab
+  >
+    <v-icon>add</v-icon>
+  </v-btn>
+  <v-btn
+    class="blue" id="zoomdown"
+    v-tooltip:left="{ html: 'Zoom Out' }"
+    @click="zoom--"
+    dark
+    small
+    absolute
+    bottom
+    right
+    fab
+  >
+    <v-icon>remove</v-icon>
+  </v-btn>
+  <v-btn
+    class="blue" id="maptype"
+    @click="showSeaMap=!showSeaMap"
+    v-tooltip:left="{ html: 'Toggle Sea Map' }"
+    dark
+    small
+    absolute
+    top
+    right
+    fab
+  >
+    <v-icon>map</v-icon>
+  </v-btn>
+  <v-btn
+    class="deep-orange" id="bigMap"
+    @click="toggleBigMap"
+    v-tooltip:right="{ html: 'Toggle Big Map' }"
+    dark
+    small
+    absolute
+    top
+    left
+    fab
+  >
+    <v-icon>aspect_ratio</v-icon>
+  </v-btn>
+  <v-btn
+    class="blue-grey" id="timeStampMarkers"
+    @click="timeStampMarkers=!timeStampMarkers"
+    v-tooltip:left="{ html: 'Show Time Stamped Markers' }"
+    dark
+    small
+    absolute
+    top
+    right
+    fab
+  >
+    <v-icon>access_time</v-icon>
+  </v-btn>
 </div>
 </template>
 <script>
@@ -24,22 +89,18 @@
     name: 'sea-map',
     props: {
       vessel: null,
-      selectedVessel: null,
-      zoom: {
-        default: 10,
-        type: Number
-      },
-      showSeaMap: {
-        defualt: false,
-        type: Boolean
-      }
+      selectedVessel: null
     },
     data () {
       return {
         mapName: this.vessel.MMSI + '-map',
         map: null,
         path: [],
-        marker: null
+        marker: null,
+        showSeaMap: false,
+        zoom: 12,
+        bigMap: false,
+        timeStampMarkers: false
       }
     },
     computed: {
@@ -67,15 +128,25 @@
     },
     watch: {
       'vessel': function () {
-        this.reloadMap()
+        if (this.selectedVessel) {
+          if (this.selectedVessel.MMSI === this.vessel.MMSI) {
+            this.reloadMap()
+          }
+        }
       },
       'selectedVessel': function () {
-        if (this.selectedVessel.MMSI === this.vessel.MMSI) {
-          this.reloadMap()
+        if (this.selectedVessel) {
+          if (this.selectedVessel.MMSI === this.vessel.MMSI) {
+            this.reloadMap()
+          }
         }
       },
       'showSeaMap': function () {
+        console.log('reloading map')
         this.toggleSeaMap()
+      },
+      'zoom': function () {
+        this.map.setZoom(this.zoom)
       }
     },
     methods: {
@@ -85,6 +156,9 @@
         if (centerPos) {
           this.map.setCenter(centerPos)
           this.marker = new window.google.maps.Marker(this.position)
+          if (!this.timeStampMarkes) {
+            console.log('find a way to clear markers')
+          }
           // eslint-disable-next-line no-new
           new window.google.maps.Marker({
             position: this.marker,
@@ -109,6 +183,9 @@
         } else {
           this.map.setMapTypeId('roadmap')
         }
+      },
+      toggleBigMap () {
+        this.$emit('toggleBigMap')
       }
     },
     mounted: function () {
@@ -120,13 +197,8 @@
         const el = document.getElementById(this.mapName)
         const options = {
           zoom: this.zoom,
-          // center: new google.maps.LatLng(this.position.lat, this.position.lng),
-          zoomControl: true,
-          mapTypeControl: false,
-          scaleControl: false,
-          streetViewControl: false,
-          rotateControl: false,
-          fullscreenControl: true
+          center: new google.maps.LatLng(this.position.lat, this.position.lng),
+          disableDefaultUI: true
         }
         this.map = new google.maps.Map(el, options)
         this.reloadMap()
@@ -138,8 +210,30 @@
 <style scoped>
 .google-map {
   width: 100%;
-  height: 420px;
+  height: 400px;
   margin: 0 auto;
   background: gray;
+}
+
+#zoomup {
+  bottom: 82px;
+  right: 12px
+}
+#zoomdown {
+  bottom: 32px;
+  right: 12px
+}
+
+#maptype {
+  top: 12px;
+  right: 12px
+}
+#bigMap {
+  top: 12px;
+  left: 12px
+}
+#timeStampMarkers {
+  top: 82px;
+  right: 12px
 }
 </style>

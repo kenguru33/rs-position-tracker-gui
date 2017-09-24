@@ -3,7 +3,7 @@
     <v-card-text class="grey lighten-3">
       <v-container fluid grid-list-md>
         <v-layout row wrap>
-          <v-flex d-flex xs12 sm12 md6>
+          <v-flex d-flex xs12 sm12 md6 v-if="!showBigMap">
             <v-layout row wrap>
               <v-flex d-flex>
                 <v-card>
@@ -19,17 +19,17 @@
                     </div>
                   </v-card-title>
                   <v-card-actions>
-                    <v-btn flat class="orange--text" @click="showSeaMap=!showSeaMap">Toggle Time stamp marker</v-btn>
-                    <v-btn flat class="orange--text" @click="showSeaMap=!showSeaMap">Toggle SeaMap</v-btn>
+                    <v-btn flat class="orange--text">Share</v-btn>
+                    <v-btn flat class="orange--text">Details</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
             </v-layout>
           </v-flex>
-          <v-flex d-flex xs12 sm12 md6>
+          <v-flex d-flex xs12 sm12 md6 id="map">
             <v-card>
               <v-flex d-flex xs12>
-                <sea-map :vessel="vessel" :selectedVessel="selectedVessel" :showSeaMap="showSeaMap" ></sea-map>
+                <sea-map :vessel="vessel" :selectedVessel="selectedVessel" :showSeaMap="showSeaMap" @toggleBigMap="showBigMap=!showBigMap"></sea-map>
               </v-flex>
             </v-card>
           </v-flex>
@@ -50,17 +50,7 @@
       return {
         imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
         showSeaMap: false,
-        // buttons
-        direction: 'top',
-        fab: false,
-        fling: false,
-        hover: false,
-        tabs: null,
-        top: false,
-        right: true,
-        bottom: true,
-        left: false,
-        transition: 'slide-y-reverse-transition'
+        showBigMap: false
       }
     },
     computed: {
@@ -81,13 +71,9 @@
     }
   }
 </script>
-<style>
-  /* This is for documentation purposes and will not be needed in your application */
-  #create .balle {
-    position: absolute;
-  }
 
-  #create .btn--floating {
-    position: relative;
+<style scoped>
+  #map {
+    max-width: 100%
   }
 </style>
