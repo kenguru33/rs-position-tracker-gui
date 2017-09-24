@@ -19,7 +19,7 @@
                     </div>
                   </v-card-title>
                   <v-card-actions>
-                    <v-spacer></v-spacer>
+                    <v-btn flat class="orange--text" @click="showSeaMap=!showSeaMap">Toggle Time stamp marker</v-btn>
                     <v-btn flat class="orange--text" @click="showSeaMap=!showSeaMap">Toggle SeaMap</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -28,7 +28,9 @@
           </v-flex>
           <v-flex d-flex xs12 sm12 md6>
             <v-card>
-              <sea-map :vessel="vessel" :selectedVessel="selectedVessel" :showSeaMap="showSeaMap" ></sea-map>
+              <v-flex d-flex xs12>
+                <sea-map :vessel="vessel" :selectedVessel="selectedVessel" :showSeaMap="showSeaMap" ></sea-map>
+              </v-flex>
             </v-card>
           </v-flex>
         </v-layout>
@@ -47,7 +49,18 @@
     data: () => {
       return {
         imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
-        showSeaMap: false
+        showSeaMap: false,
+        // buttons
+        direction: 'top',
+        fab: false,
+        fling: false,
+        hover: false,
+        tabs: null,
+        top: false,
+        right: true,
+        bottom: true,
+        left: false,
+        transition: 'slide-y-reverse-transition'
       }
     },
     computed: {
@@ -68,3 +81,13 @@
     }
   }
 </script>
+<style>
+  /* This is for documentation purposes and will not be needed in your application */
+  #create .balle {
+    position: absolute;
+  }
+
+  #create .btn--floating {
+    position: relative;
+  }
+</style>

@@ -38,8 +38,8 @@
       return {
         mapName: this.vessel.MMSI + '-map',
         map: null,
-        marker: null,
-        path: []
+        path: [],
+        marker: null
       }
     },
     computed: {
@@ -67,11 +67,11 @@
     },
     watch: {
       'vessel': function () {
-        this.moveToCenter()
+        this.reloadMap()
       },
       'selectedVessel': function () {
         if (this.selectedVessel.MMSI === this.vessel.MMSI) {
-          this.moveToCenter()
+          this.reloadMap()
         }
       },
       'showSeaMap': function () {
@@ -79,13 +79,28 @@
       }
     },
     methods: {
-      moveToCenter () {
-        // console.log('resize map', this.selectedVessel.MMSI)
+      reloadMap () {
         const centerPos = new window.google.maps.LatLng(this.position.lat, this.position.lng)
-        window.google.maps.event.trigger(this.map, 'resize')
+        this.marker = new window.google.maps.Marker(this.position)
         if (centerPos) {
-          this.map.panTo(centerPos)
+          this.map.setCenter(centerPos)
+          this.marker = new window.google.maps.Marker(this.position)
+          // eslint-disable-next-line no-new
+          new window.google.maps.Marker({
+            position: this.marker,
+            title: this.vessel.Time_stamp,
+            map: this.map
+          })
+          this.path = new window.google.maps.Polyline({
+            path: this.positions,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          })
+          this.path.setMap(this.map)
         }
+        window.google.maps.event.trigger(this.map, 'resize')
       },
       toggleSeaMap () {
         if (this.showSeaMap) {
@@ -105,7 +120,7 @@
         const el = document.getElementById(this.mapName)
         const options = {
           zoom: this.zoom,
-          center: new google.maps.LatLng(this.position.lat, this.position.lng),
+          // center: new google.maps.LatLng(this.position.lat, this.position.lng),
           zoomControl: true,
           mapTypeControl: false,
           scaleControl: false,
@@ -114,21 +129,7 @@
           fullscreenControl: true
         }
         this.map = new google.maps.Map(el, options)
-        /* eslint-disable no-new */
-        new google.maps.Marker({
-          position: new google.maps.LatLng(this.position.lat, this.position.lng),
-          map: this.map,
-          title: this.vessel.Ship_name
-        })
-        new google.maps.Polyline({
-          path: this.positions,
-          geodesic: true,
-          strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 2,
-          map: this.map
-        })
-        this.moveToCenter()
+        this.reloadMap()
       })
     }
   }
