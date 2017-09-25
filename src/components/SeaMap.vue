@@ -68,6 +68,19 @@
   >
     <v-icon>access_time</v-icon>
   </v-btn>
+  <v-btn
+    class="green" id="followVessel"
+    @click="follow=!follow"
+    v-tooltip:left="{ html: 'Lock on vessel' }"
+    dark
+    small
+    absolute
+    top
+    right
+    fab
+  >
+    <v-icon>{{this.lockOnVesselIcon}}</v-icon>
+  </v-btn>
 </div>
 </template>
 <script>
@@ -100,7 +113,8 @@
         showSeaMap: false,
         zoom: 12,
         bigMap: false,
-        timeStampMarkers: false
+        timeStampMarkers: false,
+        follow: true
       }
     },
     computed: {
@@ -124,6 +138,12 @@
           p.push({lat: parseFloat(positions[i + 1]), lng: parseFloat(positions[i])})
         }
         return p
+      },
+      lockOnVesselIcon: function () {
+        if (this.follow) {
+          return 'lock'
+        }
+        return 'lock_open'
       }
     },
     watch: {
@@ -152,8 +172,8 @@
     methods: {
       reloadMap () {
         const centerPos = new window.google.maps.LatLng(this.position.lat, this.position.lng)
-        this.marker = new window.google.maps.Marker(this.position)
-        if (centerPos) {
+        // this.marker = new window.google.maps.Marker(this.position)
+        if (centerPos && this.follow) {
           this.map.setCenter(centerPos)
           this.marker = new window.google.maps.Marker(this.position)
           if (!this.timeStampMarkes) {
@@ -234,6 +254,10 @@
 }
 #timeStampMarkers {
   top: 82px;
+  right: 12px
+}
+#followVessel {
+  top: 132px;
   right: 12px
 }
 </style>
