@@ -4,7 +4,7 @@
     <p>Map is loading...</p>
   </div>
   <v-btn
-    class="pink" id="zoomup"
+    class="green" id="zoomup"
     v-tooltip:left="{ html: 'Zoom In' }"
     @click="zoom++"
     dark
@@ -17,7 +17,7 @@
     <v-icon>add</v-icon>
   </v-btn>
   <v-btn
-    class="blue" id="zoomdown"
+    class="red" id="zoomdown"
     v-tooltip:left="{ html: 'Zoom Out' }"
     @click="zoom--"
     dark
@@ -40,7 +40,7 @@
     right
     fab
   >
-    <v-icon>map</v-icon>
+    <v-icon>{{seaMapIcon}}</v-icon>
   </v-btn>
   <v-btn
     class="deep-orange" id="bigMap"
@@ -53,11 +53,11 @@
     left
     fab
   >
-    <v-icon>aspect_ratio</v-icon>
+    <v-icon>{{bigMapIcon}}</v-icon>
   </v-btn>
   <v-btn
     class="blue-grey" id="timeStampMarkers"
-    @click="timeStampMarkers=!timeStampMarkers"
+    @click="getMarkerHistory"
     v-tooltip:left="{ html: 'Show Time Stamped Markers' }"
     dark
     small
@@ -65,11 +65,12 @@
     top
     right
     fab
+    v-if="false"
   >
     <v-icon>access_time</v-icon>
   </v-btn>
   <v-btn
-    class="green" id="followVessel"
+    class="pink" id="followVessel"
     @click="follow=!follow"
     v-tooltip:left="{ html: 'Lock on vessel' }"
     dark
@@ -113,8 +114,9 @@
         showSeaMap: false,
         zoom: 12,
         bigMap: false,
-        timeStampMarkers: false,
-        follow: true
+        follow: true,
+        markerHistory: [],
+        timeStampMarkers: false
       }
     },
     computed: {
@@ -144,6 +146,18 @@
           return 'lock'
         }
         return 'lock_open'
+      },
+      seaMapIcon: function () {
+        if (this.showSeaMap) {
+          return 'layers'
+        }
+        return 'layers_clear'
+      },
+      bigMapIcon: function () {
+        if (this.bigMap) {
+          return 'fullscreen_exit'
+        }
+        return 'fullscreen'
       }
     },
     watch: {
@@ -172,29 +186,35 @@
     methods: {
       reloadMap () {
         const centerPos = new window.google.maps.LatLng(this.position.lat, this.position.lng)
-        // this.marker = new window.google.maps.Marker(this.position)
         if (centerPos && this.follow) {
           this.map.setCenter(centerPos)
-          this.marker = new window.google.maps.Marker(this.position)
-          if (!this.timeStampMarkes) {
-            console.log('find a way to clear markers')
-          }
-          // eslint-disable-next-line no-new
-          new window.google.maps.Marker({
-            position: this.marker,
-            title: this.vessel.Time_stamp,
-            map: this.map
-          })
+          this.marker.setPosition(centerPos)
+          this.marker.setTitle(new Date(this.vessel.Time_stamp).toLocaleString())
+          this.markerHistory.push(this.marker)
           this.path = new window.google.maps.Polyline({
             path: this.positions,
             geodesic: true,
-            strokeColor: '#FF0000',
+            strokeColor: '#676a6a',
             strokeOpacity: 1.0,
-            strokeWeight: 2
+            strokeWeight: 3.0
           })
           this.path.setMap(this.map)
         }
         window.google.maps.event.trigger(this.map, 'resize')
+      },
+      placeAllMarkers () {
+        this.markerHistory.map(mark => {
+          this.mark.setMap(mark)
+        })
+      },
+      removeAllMarkers () {
+        this.markerHistory.map(mark => {
+          this.mark.setMap(null)
+        })
+        this.markerHistory = []
+      },
+      getMarkerHistory () {
+        console.log(this.markerHistory)
       },
       toggleSeaMap () {
         if (this.showSeaMap) {
@@ -206,12 +226,13 @@
       },
       toggleBigMap () {
         this.$emit('toggleBigMap')
+        this.bigMap = !this.bigMap
       }
     },
     mounted: function () {
       GoogleMapsLoader.KEY = 'AIzaSyCCFWll4oEjXml1BVeZ3-x1TZphNVx8yko'
       GoogleMapsLoader.onLoad(google => {
-        console.log('I just loaded google maps api')
+        // console.log('I just loaded google maps api')
       })
       GoogleMapsLoader.load(google => {
         const el = document.getElementById(this.mapName)
@@ -221,6 +242,10 @@
           disableDefaultUI: true
         }
         this.map = new google.maps.Map(el, options)
+        this.marker = new window.google.maps.Marker({
+          position: this.marker,
+          map: this.map
+        })
         this.reloadMap()
       })
     }
@@ -257,7 +282,7 @@
   right: 12px
 }
 #followVessel {
-  top: 132px;
+  top: 72px;
   right: 12px
 }
 </style>

@@ -15,12 +15,12 @@
                       <div>MMSI: {{vessel.MMSI}}</div>
                       <div>SOG: {{vessel.SOG}} knots - COG: {{vessel.COG}}°</div>
                       <div>Latitude: {{vessel.Latitude}} Longitude: {{vessel.Longitude}}</div>
+                      <div>Navigation Status: {{vessel.Nav_Status}}</div>
                       <div>Last updated: {{new Date(vessel.Time_stamp).toLocaleString()}}</div>
                     </div>
                   </v-card-title>
                   <v-card-actions>
-                    <v-btn flat class="orange--text">Share</v-btn>
-                    <v-btn flat class="orange--text">Details</v-btn>
+                    <v-btn flat class="orange--text" v-if="false">Details</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -40,7 +40,10 @@
 </template>
 
 <script>
+  import VIcon from '../../node_modules/vuetify/src/components/VIcon/VIcon.vue'
+
   export default {
+    components: {VIcon},
     name: 'vessel-view',
     props: {
       vessel: null,
