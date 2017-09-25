@@ -149,9 +149,9 @@
       },
       seaMapIcon: function () {
         if (this.showSeaMap) {
-          return 'layers'
+          return 'layers_clear'
         }
-        return 'layers_clear'
+        return 'layers'
       },
       bigMapIcon: function () {
         if (this.bigMap) {
