@@ -51,7 +51,7 @@
     },
     data: () => {
       return {
-        imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
+        imgUrl: 'static/vessel-images',
         showSeaMap: false,
         showBigMap: false
       }

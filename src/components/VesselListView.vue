@@ -3,8 +3,8 @@
       <v-layout row wrap dark>
         <v-flex xs12>
           <v-expansion-panel popout>
-            <v-expansion-panel-content v-for="(vessel, i) in vessels" :key="vessel.MMSI" 
-            @click.native="selectedVessel=vessel" 
+            <v-expansion-panel-content v-for="(vessel, i) in vessels" :key="vessel.MMSI"
+            @click.native="selectedVessel=vessel"
             v-show="isVesselMoving(vessel) || !filterMovingVessels">
               <div slot="header">
                 <v-list-tile avatar>
@@ -32,7 +32,7 @@
     data () {
       return {
         vessels: [],
-        imgUrl: 'https://s3.us-east-2.amazonaws.com/rs-storage-01/vessel-images',
+        imgUrl: 'static/vessel-images',
         selectedVessel: null
       }
     },
