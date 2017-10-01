@@ -32,7 +32,7 @@ export default {
     this.$store.dispatch('fetchVessels', 'https://ais.rs.no/aktive_pos.json')
     intervalId = setInterval(() => {
       this.$store.dispatch('fetchVessels', 'https://ais.rs.no/aktive_pos.json')
-    }, 5000)
+    }, 30000)
   },
   destroyed () {
     clearInterval(intervalId)

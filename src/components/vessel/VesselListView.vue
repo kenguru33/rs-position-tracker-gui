@@ -17,7 +17,7 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </div>
-              <vessel-view :vessel="vessel"></vessel-view>
+              <vessel-view :mmsi="vessel.MMSI"></vessel-view>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-flex>
@@ -51,6 +51,7 @@
       },
       selectVessel (vessel) {
         this.$store.dispatch('selectVessel', vessel)
+        // console.log('dispathing', vessel.MMSI)
       }
     }
   }

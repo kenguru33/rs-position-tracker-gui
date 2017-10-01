@@ -1,12 +1,12 @@
 <template>
-  <v-card>
+  <v-card v-if="vessel.MMSI === mmsi">
     <v-card-text class="grey lighten-3">
       <v-container fluid grid-list-md>
         <v-layout row wrap>
           <v-flex d-flex xs12 sm12 md6>
             <v-layout row wrap>
               <v-flex d-flex>
-                <v-card v-if="vessel">
+                <v-card>
                   <v-card-media :src="imgUrl+ '/' + vessel.MMSI + '.jpg'" height="200px">
                   </v-card-media>
                   <v-card-title primary-title>
@@ -54,7 +54,7 @@
     },
     computed: {
       vessel: function () {
-        this.$store.getters.vessels.find((vessel) => {
+        return this.$store.getters.vessels.find((vessel) => {
           return vessel.MMSI === this.mmsi
         })
       }

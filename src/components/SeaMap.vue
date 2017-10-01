@@ -1,12 +1,10 @@
 <template>
   <gmap-map
-    ref="buggabugga"
     :center="center"
-    :zoom="7"
+    :zoom="12"
     style="width: 100%; height: 400px"
   >
     <gmap-marker
-      ref="myMap"
       :key="index"
       v-for="(m, index) in markers"
       :position="m.position"
@@ -18,7 +16,6 @@
 </template>
 
 <script>
-  // New in 0.4.0
   import * as VueGoogleMaps from 'vue2-google-maps'
   import Vue from 'vue'
 
@@ -31,18 +28,36 @@
   })
 
   export default {
-    props: [
-      'vessel'
-    ],
+    props: {
+      vessel: null
+    },
     data () {
       return {
-        center: {lat: 10.0, lng: 10.0},
+        center: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) },
         markers: [{
-          position: {lat: 10.0, lng: 10.0}
-        }, {
-          position: {lat: 11.0, lng: 11.0}
+          position: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+        }]
+      }
+    },
+    computed: {
+      selectedVessel: function () {
+        return this.$store.getters.selectedVessel
+      }
+    },
+    watch: {
+      'selectedVessel': function () {
+        Vue.$gmapDefaultResizeBus.$emit('resize')
+      },
+      'vessel': function () {
+        console.log('updated center:', this.center.lat, this.center.lng)
+        this.center = { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+        this.markers = [{
+          position: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
         }]
       }
     }
   }
 </script>
+<style>
+
+</style>
