@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="vessel.MMSI === mmsi">
+  <v-card v-if="vessel">
     <v-card-text class="grey lighten-3">
       <v-container fluid grid-list-md>
         <v-layout row wrap>
@@ -45,18 +45,11 @@
     components: {SeaMap},
     name: 'vessel-view',
     props: {
-      mmsi: null
+      vessel: null
     },
     data: function () {
       return {
         imgUrl: 'static/vessel-images'
-      }
-    },
-    computed: {
-      vessel: function () {
-        return this.$store.getters.vessels.find((vessel) => {
-          return vessel.MMSI === this.mmsi
-        })
       }
     }
   }
