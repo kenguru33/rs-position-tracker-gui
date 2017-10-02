@@ -3,7 +3,7 @@
     <v-card-text class="grey lighten-3">
       <v-container fluid grid-list-md>
         <v-layout row wrap>
-          <v-flex d-flex xs12 sm12 md6>
+          <v-flex d-flex xs12 sm12 md6 v-if="!showBigMap">
             <v-layout row wrap>
               <v-flex d-flex>
                 <v-card>
@@ -28,7 +28,7 @@
           <v-flex d-flex xs12 sm12 md6 id="map">
             <v-card>
               <v-flex d-flex xs12>
-                <sea-map :vessel="vessel"></sea-map>
+                <sea-map :vessel="vessel" @showBigMap="showBigMap=!showBigMap" ></sea-map>
               </v-flex>
             </v-card>
           </v-flex>
@@ -49,7 +49,8 @@
     },
     data: function () {
       return {
-        imgUrl: 'static/vessel-images'
+        imgUrl: 'static/vessel-images',
+        showBigMap: false
       }
     }
   }

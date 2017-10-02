@@ -56,6 +56,19 @@
   >
     <v-icon>remove</v-icon>
   </v-btn>
+  <v-btn
+    class="deep-orange" id="bigMap"
+    @click="showBigMap=!showBigMap"
+    v-tooltip:right="{ html: showBigMapToolTipText }"
+    dark
+    small
+    absolute
+    top
+    left
+    fab
+  >
+    <v-icon>{{bigMapIcon}}</v-icon>
+  </v-btn>
   </div>
 </template>
 
@@ -94,7 +107,9 @@
         }],
         showSeaMap: false,
         showSeaMapToolTipText: null,
-        zoom: 12
+        zoom: 12,
+        showBigMap: false,
+        showBigMapToolTipText: null
       }
     },
     computed: {
@@ -108,6 +123,14 @@
         }
         this.showSeaMapToolTipText = 'show sea map'
         return 'layers'
+      },
+      bigMapIcon: function () {
+        if (this.bigMap) {
+          this.showBigMapToolTipText = 'show small map'
+          return 'fullscreen_exit'
+        }
+        this.showBigMapToolTipText = 'show big map'
+        return 'fullscreen'
       }
     },
     watch: {
@@ -126,6 +149,10 @@
         } else {
           this.$refs.seaMap.$mapObject.setMapTypeId('roadmap')
         }
+      },
+      'showBigMap': function () {
+        this.$emit('showBigMap')
+        Vue.$gmapDefaultResizeBus.$emit('resize')
       }
     },
     methods: {
@@ -149,5 +176,9 @@
 #zoomdown {
   bottom: 32px;
   right: 12px
+}
+#bigMap {
+  top: 12px;
+  left: 12px
 }
 </style>
