@@ -7,6 +7,7 @@
     :options="{disableDefaultUI: true}"
     style="width: 100%; height: 400px"
     map-type-id="roadmap"
+    @dragend="centerToVessel"
   >
     <gmap-marker
       :key="index"
@@ -69,6 +70,19 @@
   >
     <v-icon>{{bigMapIcon}}</v-icon>
   </v-btn>
+  <v-btn
+    class="pink" id="followVessel"
+    @click="followVessel=!followVessel"
+    v-tooltip:left="{ html: followVesselToolTipText }"
+    dark
+    small
+    absolute
+    top
+    right
+    fab
+  >
+    <v-icon>{{followVesselIcon}}</v-icon>
+  </v-btn>
   </div>
 </template>
 
@@ -109,7 +123,9 @@
         showSeaMapToolTipText: null,
         zoom: 12,
         showBigMap: false,
-        showBigMapToolTipText: null
+        showBigMapToolTipText: null,
+        followVessel: true,
+        followVesselToolTipText: null
       }
     },
     computed: {
@@ -125,12 +141,20 @@
         return 'layers'
       },
       bigMapIcon: function () {
-        if (this.bigMap) {
-          this.showBigMapToolTipText = 'show small map'
-          return 'fullscreen_exit'
+        if (this.showBigMap) {
+          this.showBigMapToolTipText = 'show big map'
+          return 'fullscreen'
         }
-        this.showBigMapToolTipText = 'show big map'
-        return 'fullscreen'
+        this.showBigMapToolTipText = 'show small map'
+        return 'fullscreen_exit'
+      },
+      followVesselIcon: function () {
+        if (this.followVessel) {
+          this.followVesselToolTipText = 'follow vessel'
+          return 'gps_fixed'
+        }
+        this.followVesselToolTipText = 'do not follow vessel'
+        return 'gps_not_fixed'
       }
     },
     watch: {
@@ -138,7 +162,9 @@
         Vue.$gmapDefaultResizeBus.$emit('resize')
       },
       'vessel': function () {
-        this.center = { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+        if (this.followVessel) {
+          this.center = { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+        }
         this.markers = [{
           position: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
         }]
@@ -153,9 +179,17 @@
       'showBigMap': function () {
         this.$emit('showBigMap')
         Vue.$gmapDefaultResizeBus.$emit('resize')
+      },
+      'followVessel': function () {
+        this.centerToVessel()
       }
     },
     methods: {
+      centerToVessel () {
+        if (this.followVessel) {
+          this.$refs.seaMap.$mapObject.setCenter(this.markers[0].position)
+        }
+      }
     },
     mounted: function () {
       this.$refs.seaMap.$mapCreated.then(() => {
@@ -180,5 +214,9 @@
 #bigMap {
   top: 12px;
   left: 12px
+}
+#followVessel {
+  top: 72px;
+  right: 12px
 }
 </style>
