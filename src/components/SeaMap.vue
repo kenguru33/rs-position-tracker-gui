@@ -160,6 +160,9 @@
       },
       path: function () {
         return this.$store.getters.selectedVesselPath
+      },
+      pathInMinutes: function () {
+        return this.$store.getters.pathInMinutes
       }
     },
     watch: {
@@ -190,6 +193,12 @@
       },
       'followVessel': function () {
         this.centerToVessel()
+      },
+      'pathInMinutes': function () {
+        // this.refetchPath()
+        if (this.vessel.MMSI === this.$store.getters.selectedVessel.MMSI) {
+          this.refetchPath()
+        }
       }
     },
     methods: {
