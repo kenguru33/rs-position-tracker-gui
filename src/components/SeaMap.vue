@@ -90,6 +90,7 @@
 <script>
   import * as VueGoogleMaps from 'vue2-google-maps'
   import Vue from 'vue'
+  import moment from 'moment'
 
   Vue.use(VueGoogleMaps, {
     load: {
@@ -166,12 +167,15 @@
         Vue.$gmapDefaultResizeBus.$emit('resize')
       },
       'vessel': function () {
-        if (this.followVessel) {
-          this.center = { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+        if (this.vessel.MMSI === this.$store.getters.selectedVessel.MMSI) {
+          this.$store.dispatch('addToPath', { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) })
+          if (this.followVessel) {
+            this.center = { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+          }
+          this.markers = [{
+            position: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
+          }]
         }
-        this.markers = [{
-          position: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
-        }]
       },
       'showSeaMap': function () {
         if (this.showSeaMap) {
@@ -193,6 +197,11 @@
         if (this.followVessel) {
           this.$refs.seaMap.$mapObject.setCenter(this.markers[0].position)
         }
+      },
+      refetchPath () {
+        const t2 = new Date()
+        const t1 = moment(t2).subtract(this.$store.getters.pathInMinutes, 'minutes').toDate()
+        this.$store.dispatch('fetchSelectedVesselPath', { mmsi: this.$store.getters.selectedVessel.MMSI, fromUTC: t1.toUTCString(), toUTC: t2.toUTCString() })
       }
     },
     mounted: function () {

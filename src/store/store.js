@@ -43,6 +43,9 @@ export const store = new Vuex.Store({
     },
     setPathInMinutes: (state, minutes) => {
       state.pathInMinutes = minutes
+    },
+    addToPath: (state, position) => {
+      state.selectedVesselPath.push(position)
     }
   },
   actions: {
@@ -68,6 +71,9 @@ export const store = new Vuex.Store({
     },
     setPathInMinutes: ({ commit }, minutes) => {
       commit('setPathInMinutes', minutes)
+    },
+    addToPath: ({ commit }, position) => {
+      commit('addToPath', position)
     }
   }
 })
