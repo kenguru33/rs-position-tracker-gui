@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
     vessels: [],
     selectedVessel: null,
     selectedVesselPath: [],
-    pathInMinutes: 60
+    pathInMinutes: 120
   },
   getters: {
     filterMovingVessels: state => {

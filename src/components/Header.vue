@@ -39,7 +39,7 @@
           <v-switch label="Moving Vessels" v-model="filterMovingVessels"></v-switch>
         </v-list-tile>
         <v-list-tile>
-          <v-slider label="Track Path (minutes)" v-model="pathInMinutes" :max="500" thumb-label></v-slider>
+          <v-slider label="Track Path (minutes)" v-model="pathInMinutes" :max="1000" thumb-label></v-slider>
         </v-list-tile>
       </v-list>
     </v-bottom-sheet>
