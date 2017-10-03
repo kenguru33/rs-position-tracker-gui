@@ -36,10 +36,10 @@
     <v-bottom-sheet v-model="sheetVisable">
       <v-list>
         <v-list-tile>
-          <v-switch label="Moving Vessels" v-model="filterMovingVessels" ></v-switch>
+          <v-switch label="Moving Vessels" v-model="filterMovingVessels"></v-switch>
         </v-list-tile>
         <v-list-tile>
-          <v-slider label="Tail Length" v-model="tailLength" :step="5" snap thumb-label></v-slider>
+          <v-slider label="Track Path Length" v-model="pathInMinutes" thumb-label></v-slider>
         </v-list-tile>
       </v-list>
     </v-bottom-sheet>
@@ -59,8 +59,7 @@ export default {
         { title: 'Historical View', icon: 'access_time' },
         { title: 'Location View', icon: 'location_on' }
       ],
-      sheetVisable: false,
-      tailLength: 50
+      sheetVisable: false
     }
   },
   computed: {
@@ -72,6 +71,12 @@ export default {
     },
     vessels: function () {
       return this.$store.getters.vessels
+    },
+    pathInMinutes: {
+      get () { return this.$store.getters.pathInMinutes },
+      set (minutes) {
+        this.$store.dispatch('setPathInMinutes', minutes)
+      }
     }
   }
 }

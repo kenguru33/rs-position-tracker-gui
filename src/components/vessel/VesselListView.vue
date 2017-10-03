@@ -26,7 +26,7 @@
   </template>
 <script>
   import VesselView from './VesselView.vue'
-
+  import moment from 'moment'
   export default {
     components: {VesselView},
     data () {
@@ -51,6 +51,9 @@
       },
       selectVessel (vessel) {
         this.$store.dispatch('selectVessel', vessel)
+        const t2 = new Date()
+        const t1 = moment(t2).subtract(this.$store.getters.pathInMinutes, 'minutes').toDate()
+        this.$store.dispatch('fetchSelectedVesselPath', { mmsi: vessel.MMSI, fromUTC: t1.toUTCString(), toUTC: t2.toUTCString() })
       }
     }
   }

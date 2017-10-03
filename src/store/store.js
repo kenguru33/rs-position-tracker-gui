@@ -7,7 +7,9 @@ export const store = new Vuex.Store({
   state: {
     filterMovingVessels: false,
     vessels: [],
-    selectedVessel: null
+    selectedVessel: null,
+    selectedVesselPath: [],
+    pathInMinutes: 60
   },
   getters: {
     filterMovingVessels: state => {
@@ -18,6 +20,12 @@ export const store = new Vuex.Store({
     },
     selectedVessel: state => {
       return state.selectedVessel
+    },
+    selectedVesselPath: state => {
+      return state.selectedVesselPath
+    },
+    pathInMinutes: state => {
+      return state.pathInMinutes
     }
   },
   mutations: {
@@ -29,6 +37,12 @@ export const store = new Vuex.Store({
     },
     selectVessel: (state, selectedVessel) => {
       state.selectedVessel = selectedVessel
+    },
+    fetchSelectedVesselPath: (state, selectedVesselPath) => {
+      state.selectedVesselPath = selectedVesselPath
+    },
+    setPathInMinutes: (state, minutes) => {
+      state.pathInMinutes = minutes
     }
   },
   actions: {
@@ -43,6 +57,17 @@ export const store = new Vuex.Store({
     },
     selectVessel: ({ commit }, vessel) => {
       commit('selectVessel', vessel)
+    },
+    fetchSelectedVesselPath: ({ commit }, options) => {
+      Vue.http.get(`https://aistracker.rs.no/api/get_positions/${options.mmsi}/${options.fromUTC}/${options.toUTC}`)
+        .then(vesselData => {
+          commit('fetchSelectedVesselPath', vesselData.data.map(pos => {
+            return {lat: pos.Decimal_Latitude, lng: pos.Decimal_Longitude, date: pos.Time_stamp}
+          }))
+        })
+    },
+    setPathInMinutes: ({ commit }, minutes) => {
+      commit('setPathInMinutes', minutes)
     }
   }
 })

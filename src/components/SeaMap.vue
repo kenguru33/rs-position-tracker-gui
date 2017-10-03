@@ -17,6 +17,7 @@
       :draggable="false"
       @click="center=m.position"
     ></gmap-marker>
+    <gmap-polyline :path="path"></gmap-polyline>
   </gmap-map>
     <v-btn
       class="blue" id="maptype"
@@ -155,6 +156,9 @@
         }
         this.followVesselToolTipText = 'do not follow vessel'
         return 'gps_not_fixed'
+      },
+      path: function () {
+        return this.$store.getters.selectedVesselPath
       }
     },
     watch: {
