@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="vessel">
+  <v-card>
     <v-card-text class="grey lighten-3">
       <v-container fluid grid-list-md>
         <v-layout row wrap>
@@ -28,7 +28,7 @@
           <v-flex d-flex xs12 sm12 md6 id="map">
             <v-card>
               <v-flex d-flex xs12>
-                <sea-map :vessel="vessel" @showBigMap="showBigMap=!showBigMap" ></sea-map>
+                <sea-map :vessel="vessel" @showBigMap="showBigMap=!showBigMap" v-if="isSelected"></sea-map>
               </v-flex>
             </v-card>
           </v-flex>
@@ -51,6 +51,17 @@
       return {
         imgUrl: 'static/vessel-images',
         showBigMap: false
+      }
+    },
+    computed: {
+      selectedVessel: function () {
+        return this.$store.getters.selectedVessel
+      },
+      isSelected: function () {
+        if (this.vessel && this.selectedVessel) {
+          return this.selectedVessel.MMSI === this.vessel.MMSI
+        }
+        return false
       }
     }
   }
