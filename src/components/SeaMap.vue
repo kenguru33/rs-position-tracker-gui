@@ -136,26 +136,26 @@
       },
       seaMapIcon: function () {
         if (this.showSeaMap) {
-          this.showSeaMapToolTipText = 'hide sea map'
+          this.showSeaMapToolTipText = 'show sea map'
           return 'layers_clear'
         }
-        this.showSeaMapToolTipText = 'show sea map'
+        this.showSeaMapToolTipText = 'hide sea map'
         return 'layers'
       },
       bigMapIcon: function () {
         if (this.showBigMap) {
-          this.showBigMapToolTipText = 'show big map'
+          this.showBigMapToolTipText = 'show small map'
           return 'fullscreen'
         }
-        this.showBigMapToolTipText = 'show small map'
+        this.showBigMapToolTipText = 'show big map'
         return 'fullscreen_exit'
       },
       followVesselIcon: function () {
         if (this.followVessel) {
-          this.followVesselToolTipText = 'follow vessel'
+          this.followVesselToolTipText = 'do not follow vessel'
           return 'gps_fixed'
         }
-        this.followVesselToolTipText = 'do not follow vessel'
+        this.followVesselToolTipText = 'follow vessel'
         return 'gps_not_fixed'
       },
       path: function () {
