@@ -5,7 +5,7 @@
     :center="center"
     :zoom="zoom"
     :options="{disableDefaultUI: true}"
-    style="width: 100%; height: 400px"
+    :style=style
     map-type-id="roadmap"
     @dragend="centerToVessel"
   >
@@ -127,7 +127,8 @@
         showBigMap: false,
         showBigMapToolTipText: null,
         followVessel: true,
-        followVesselToolTipText: null
+        followVesselToolTipText: null,
+        style: 'width: 100%; height: 400px'
       }
     },
     computed: {
@@ -136,17 +137,19 @@
       },
       seaMapIcon: function () {
         if (this.showSeaMap) {
-          this.showSeaMapToolTipText = 'show sea map'
+          this.showSeaMapToolTipText = 'hide sea map'
           return 'layers_clear'
         }
-        this.showSeaMapToolTipText = 'hide sea map'
+        this.showSeaMapToolTipText = 'show sea map'
         return 'layers'
       },
       bigMapIcon: function () {
         if (this.showBigMap) {
           this.showBigMapToolTipText = 'show small map'
+          this.style = 'width: 100%; height: 600px'
           return 'fullscreen'
         }
+        this.style = 'width: 100%; height: 400px'
         this.showBigMapToolTipText = 'show big map'
         return 'fullscreen_exit'
       },
