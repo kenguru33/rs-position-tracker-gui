@@ -5,7 +5,7 @@
     :center="center"
     :zoom="zoom"
     :options="{disableDefaultUI: true}"
-    style="width: 100%; height: 400px"
+    :style=style
     map-type-id="roadmap"
     @dragend="centerToVessel"
   >
@@ -127,7 +127,8 @@
         showBigMap: false,
         showBigMapToolTipText: null,
         followVessel: true,
-        followVesselToolTipText: null
+        followVesselToolTipText: null,
+        style: 'width: 100%; height: 400px'
       }
     },
     computed: {
@@ -144,18 +145,20 @@
       },
       bigMapIcon: function () {
         if (this.showBigMap) {
-          this.showBigMapToolTipText = 'show big map'
+          this.showBigMapToolTipText = 'show small map'
+          this.style = 'width: 100%; height: 600px'
           return 'fullscreen'
         }
-        this.showBigMapToolTipText = 'show small map'
+        this.style = 'width: 100%; height: 400px'
+        this.showBigMapToolTipText = 'show big map'
         return 'fullscreen_exit'
       },
       followVesselIcon: function () {
         if (this.followVessel) {
-          this.followVesselToolTipText = 'follow vessel'
+          this.followVesselToolTipText = 'do not follow vessel'
           return 'gps_fixed'
         }
-        this.followVesselToolTipText = 'do not follow vessel'
+        this.followVesselToolTipText = 'follow vessel'
         return 'gps_not_fixed'
       },
       path: function () {
