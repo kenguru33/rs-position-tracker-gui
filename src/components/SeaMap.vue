@@ -1,5 +1,5 @@
 <template xmlns:v-tooltip="">
-  <div v-if="vessel.MMSI===selectedVessel.MMSI">
+  <div>
   <gmap-map
     ref="seaMap"
     :center="center"
@@ -171,8 +171,8 @@
         Vue.$gmapDefaultResizeBus.$emit('resize')
       },
       'vessel': function () {
-        console.log('watch: vessel')
-        if (this.vessel.MMSI === this.$store.getters.selectedVessel.MMSI) {
+        console.log('vessel update: ', this.vessel.MMSI)
+        if (this.vessel.MMSI === this.selectedVessel.MMSI) {
           this.$store.dispatch('addToPath', { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) })
           if (this.followVessel) {
             this.center = { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
@@ -199,7 +199,7 @@
       },
       'pathInMinutes': function () {
         console.log('watch: pathInMinutes')
-        if (this.vessel.MMSI === this.$store.getters.selectedVessel.MMSI) {
+        if (this.vessel.MMSI === this.selectedVessel.MMSI) {
           this.refetchPath()
         }
       }
@@ -214,8 +214,8 @@
       refetchPath () {
         console.log('method: refetchPath')
         const t2 = new Date()
-        const t1 = moment(t2).subtract(this.$store.getters.pathInMinutes, 'minutes').toDate()
-        this.$store.dispatch('fetchSelectedVesselPath', { mmsi: this.$store.getters.selectedVessel.MMSI, fromUTC: t1.toUTCString(), toUTC: t2.toUTCString() })
+        const t1 = moment(t2).subtract(this.pathInMinutes, 'minutes').toDate()
+        this.$store.dispatch('fetchSelectedVesselPath', { mmsi: this.selectedVessel.MMSI, fromUTC: t1.toUTCString(), toUTC: t2.toUTCString() })
       }
     },
     mounted: function () {
@@ -224,6 +224,9 @@
           this.$refs.seaMap.$mapObject.mapTypes.set('sjokartraster', new SeaMapType(window.google))
         })
       }
+    },
+    created: function () {
+      console.log('created: ', this.vessel.MMSI)
     }
   }
 </script>
