@@ -62,7 +62,7 @@ export const store = new Vuex.Store({
       commit('selectVessel', vessel)
     },
     fetchSelectedVesselPath: ({ commit }, options) => {
-      Vue.http.get(`https://aistracker.rs.no/api/get_positions/${options.mmsi}/${options.fromUTC}/${options.toUTC}`)
+      Vue.http.get(`https://aistracker.herokuapp.com/api/get_positions/${options.mmsi}/${options.fromUTC}/${options.toUTC}`)
         .then(vesselData => {
           commit('fetchSelectedVesselPath', vesselData.data.map(pos => {
             return {lat: pos.Decimal_Latitude, lng: pos.Decimal_Longitude, date: pos.Time_stamp}
