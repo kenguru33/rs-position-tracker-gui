@@ -53,6 +53,7 @@ export const store = new Vuex.Store({
       commit('setFilterMovingVessels', payload)
     },
     fetchVessels: function ({ commit }, url) {
+      console.log('fetchVessels')
       Vue.http.get(url)
         .then(vessels => {
           commit('fetchVessels', vessels.data)
@@ -62,6 +63,7 @@ export const store = new Vuex.Store({
       commit('selectVessel', vessel)
     },
     fetchSelectedVesselPath: ({ commit }, options) => {
+      console.log('fetchSelectedVesselPath', options.mmsi)
       Vue.http.get(`https://aistracker.herokuapp.com/api/get_positions/${options.mmsi}/${options.fromUTC}/${options.toUTC}`)
         .then(vesselData => {
           commit('fetchSelectedVesselPath', vesselData.data.map(pos => {
