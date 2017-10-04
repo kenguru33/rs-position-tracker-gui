@@ -219,9 +219,11 @@
       }
     },
     mounted: function () {
-      this.$refs.seaMap.$mapCreated.then(() => {
-        this.$refs.seaMap.$mapObject.mapTypes.set('sjokartraster', new SeaMapType(window.google))
-      })
+      if (this.$refs.seaMap) {
+        this.$refs.seaMap.$mapCreated.then(() => {
+          this.$refs.seaMap.$mapObject.mapTypes.set('sjokartraster', new SeaMapType(window.google))
+        })
+      }
     }
   }
 </script>
