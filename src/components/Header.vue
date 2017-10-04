@@ -5,7 +5,7 @@
         <v-list class="pa-0">
           <v-list-tile avatar>
             <v-list-tile-avatar>
-              <img src="http://0.gravatar.com/avatar/ca7cfccfd2da4f5ef8fb60d2ab065052?s=200&d=mm&r=g" />
+              <img src="https://0.gravatar.com/avatar/ca7cfccfd2da4f5ef8fb60d2ab065052?s=200&d=mm&r=g" />
             </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title>Bernt Anker</v-list-tile-title>
@@ -25,7 +25,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed class="red darken-4" dark>
+    <v-toolbar fixed class="purple darken-4" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Ais-Tracker</v-toolbar-title>
       <v-spacer></v-spacer>
