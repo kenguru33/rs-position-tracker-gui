@@ -3,9 +3,9 @@ import Vuetify from 'vuetify'
 import './stylus/main.styl'
 import App from './App'
 import router from './router'
-import VueResource from 'vue-resource'
 import { store } from '@/store/store'
 import * as VueGoogleMaps from 'vue2-google-maps'
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCCFWll4oEjXml1BVeZ3-x1TZphNVx8yko',
@@ -14,7 +14,6 @@ Vue.use(VueGoogleMaps, {
   }
 })
 
-Vue.use(VueResource)
 Vue.use(Vuetify)
 Vue.config.productionTip = false
 

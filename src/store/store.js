@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -9,7 +10,8 @@ export const store = new Vuex.Store({
     vessels: [],
     selectedVessel: null,
     selectedVesselPath: [],
-    pathInMinutes: 120
+    pathInMinutes: 120,
+    errors: []
   },
   getters: {
     filterMovingVessels: state => {
@@ -26,6 +28,9 @@ export const store = new Vuex.Store({
     },
     pathInMinutes: state => {
       return state.pathInMinutes
+    },
+    errors: state => {
+      return state.errors
     }
   },
   mutations: {
@@ -46,6 +51,9 @@ export const store = new Vuex.Store({
     },
     addToPath: (state, position) => {
       state.selectedVesselPath.push(position)
+    },
+    addError: (state, err) => {
+      state.errors.push(err)
     }
   },
   actions: {
@@ -53,22 +61,26 @@ export const store = new Vuex.Store({
       commit('setFilterMovingVessels', payload)
     },
     fetchVessels: function ({ commit }, url) {
-      console.log('fetchVessels')
-      Vue.http.get(url)
-        .then(vessels => {
-          commit('fetchVessels', vessels.data)
+      axios.get(url)
+        .then(response => {
+          commit('fetchVessels', response.data)
+        })
+        .catch(err => {
+          commit('addError', err)
         })
     },
     selectVessel: ({ commit }, vessel) => {
       commit('selectVessel', vessel)
     },
     fetchSelectedVesselPath: ({ commit }, options) => {
-      console.log('fetchSelectedVesselPath', options.mmsi)
-      Vue.http.get(`https://aistracker.herokuapp.com/api/get_positions/${options.mmsi}/${options.fromUTC}/${options.toUTC}`)
-        .then(vesselData => {
-          commit('fetchSelectedVesselPath', vesselData.data.map(pos => {
+      axios.get(`https://aistracker.herokuapp.com/api/get_positions/${options.mmsi}/${options.fromUTC}/${options.toUTC}`)
+        .then(response => {
+          commit('fetchSelectedVesselPath', response.data.map(pos => {
             return {lat: pos.Decimal_Latitude, lng: pos.Decimal_Longitude, date: pos.Time_stamp}
           }))
+        })
+        .catch(err => {
+          commit('addError', err)
         })
     },
     setPathInMinutes: ({ commit }, minutes) => {
