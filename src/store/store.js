@@ -30,7 +30,7 @@ export const store = new Vuex.Store({
       return state.pathInMinutes
     },
     errors: state => {
-      return state.errors
+      return state.errors.pop()
     }
   },
   mutations: {
@@ -66,6 +66,7 @@ export const store = new Vuex.Store({
           commit('fetchVessels', response.data)
         })
         .catch(err => {
+          console.log(err.message)
           commit('addError', err)
         })
     },
