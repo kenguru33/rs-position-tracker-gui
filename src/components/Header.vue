@@ -25,7 +25,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed class="purple darken-1" dark>
+    <v-toolbar fixed class="green darken-1" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Ais-Tracker</v-toolbar-title>
       <v-spacer></v-spacer>
