@@ -1,4 +1,4 @@
-<template xmlns:v-tooltip="">
+<template>
   <div>
   <gmap-map
     ref="seaMap"
@@ -22,7 +22,6 @@
     <v-btn
       class="blue" id="maptype"
       @click="showSeaMap=!showSeaMap"
-      v-tooltip:left="{ html: showSeaMapToolTipText }"
       dark
       small
       absolute
@@ -34,7 +33,6 @@
     </v-btn>
     <v-btn
     class="green" id="zoomup"
-    v-tooltip:left="{ html: 'Zoom In' }"
     @click="zoom++"
     dark
     small
@@ -47,7 +45,6 @@
   </v-btn>
   <v-btn
     class="red" id="zoomdown"
-    v-tooltip:left="{ html: 'Zoom Out' }"
     @click="zoom--"
     dark
     small
@@ -61,7 +58,6 @@
   <v-btn
     class="deep-orange" id="bigMap"
     @click="showBigMap=!showBigMap"
-    v-tooltip:right="{ html: showBigMapToolTipText }"
     dark
     small
     absolute
@@ -74,7 +70,6 @@
   <v-btn
     class="pink" id="followVessel"
     @click="followVessel=!followVessel"
-    v-tooltip:left="{ html: followVesselToolTipText }"
     dark
     small
     absolute
@@ -122,12 +117,9 @@
           position: { lat: parseFloat(this.vessel.Decimal_Latitude), lng: parseFloat(this.vessel.Decimal_Longitude) }
         }],
         showSeaMap: false,
-        showSeaMapToolTipText: null,
         zoom: 12,
         showBigMap: false,
-        showBigMapToolTipText: null,
         followVessel: true,
-        followVesselToolTipText: null,
         style: 'width: 100%; height: 400px'
       }
     },
@@ -137,28 +129,22 @@
       },
       seaMapIcon: function () {
         if (this.showSeaMap) {
-          this.showSeaMapToolTipText = 'hide sea map'
           return 'layers_clear'
         }
-        this.showSeaMapToolTipText = 'show sea map'
         return 'layers'
       },
       bigMapIcon: function () {
         if (this.showBigMap) {
-          this.showBigMapToolTipText = 'show small map'
           this.style = 'width: 100%; height: 600px'
           return 'fullscreen'
         }
         this.style = 'width: 100%; height: 400px'
-        this.showBigMapToolTipText = 'show big map'
         return 'fullscreen_exit'
       },
       followVesselIcon: function () {
         if (this.followVessel) {
-          this.followVesselToolTipText = 'do not follow vessel'
           return 'gps_fixed'
         }
-        this.followVesselToolTipText = 'follow vessel'
         return 'gps_not_fixed'
       },
       path: function () {
