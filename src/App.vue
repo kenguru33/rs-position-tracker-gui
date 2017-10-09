@@ -2,7 +2,7 @@
   <v-app id="app-toolbar" toolbar>
     <app-header></app-header>
     <main>
-      <v-container fluid>
+      <v-container fluid mt-4>
         <!--v-router-->
         <router-view></router-view>
       </v-container>
@@ -20,11 +20,9 @@
 
 <script>
 import AppHeader from './components/Header.vue'
-import VIcon from '../node_modules/vuetify/src/components/VIcon/VIcon.vue'
 let intervalId = null
 export default {
   components: {
-    VIcon,
     AppHeader},
   data () {
     return {
