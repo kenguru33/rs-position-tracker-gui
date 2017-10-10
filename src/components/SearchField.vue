@@ -1,9 +1,6 @@
 <template>
   <v-layout row class="search-field-bar">
-    <v-btn icon @click="expanded=!expanded">
-      <v-icon>{{expandIcon}}</v-icon>
-    </v-btn>
-    <v-text-field v-if="expanded" hide-details single-line prepend-icon="search" :append-icon="appendIcon" :appendIconCb="clearSearchText" @focus="focus=true" @blur="focus=false" v-model="searchText"></v-text-field>
+    <v-text-field hide-details single-line prepend-icon="search" solo :append-icon="appendIcon" :appendIconCb="clearSearchText" @focus="focus=true" @blur="focus=false" v-model="searchText"></v-text-field>
   </v-layout>
 </template>
 <script>
@@ -11,8 +8,7 @@ export default {
   data () {
     return {
       focus: false,
-      searchText: '',
-      expanded: false
+      searchText: ''
     }
   },
   computed: {
@@ -21,13 +17,6 @@ export default {
         return 'clear'
       }
       return ''
-    },
-    expandIcon () {
-      if (this.expanded) {
-        return 'arrow_back'
-      } else {
-        return 'search'
-      }
     }
   },
   methods: {
@@ -37,13 +26,13 @@ export default {
   },
   watch: {
     'searchText': function () {
-      this.$emit('searchTextChanged', this.searchText)
+      this.$store.commit('setSearchText', this.searchText)
     }
   }
 }
 </script>
 <style scoped>
   .search-field-bar {
-    max-width: 290px;
+    max-width: 400px;
   }
 </style>

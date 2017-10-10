@@ -2,7 +2,7 @@
   <v-app id="app-toolbar" toolbar>
     <app-header></app-header>
     <main>
-      <v-container fluid mt-4>
+      <v-container fluid style="margin-top: 70px">
         <!--v-router-->
         <router-view></router-view>
       </v-container>
@@ -32,7 +32,6 @@ export default {
         { title: 'Historical View', icon: 'access_time' },
         { title: 'Location View', icon: 'location_on' }
       ],
-      sheetVisable: false,
       snackbar: false
     }
   },
