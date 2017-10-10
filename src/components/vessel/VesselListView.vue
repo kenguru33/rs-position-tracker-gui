@@ -5,7 +5,7 @@
           <v-expansion-panel popout>
             <v-expansion-panel-content v-for="(vessel, i) in vessels" :key="vessel.MMSI"
             @click.native="selectVessel(vessel)"
-            v-show="isVesselMoving(vessel) || !filterMovingVessels"
+            v-show="isVesselMoving(vessel)&&matchSearchPattern(vessel) || !filterMovingVessels&&matchSearchPattern(vessel)"
             >
               <div slot="header">
                 <v-list-tile avatar>
@@ -48,6 +48,9 @@
     methods: {
       isVesselMoving: function (vessel) {
         return vessel.SOG > 1
+      },
+      matchSearchPattern: function (vessel) {
+        return vessel.Ship_name.toUpperCase().includes(this.$store.getters.searchText.toUpperCase())
       },
       selectVessel (vessel) {
         this.$store.dispatch('selectVessel', vessel)
