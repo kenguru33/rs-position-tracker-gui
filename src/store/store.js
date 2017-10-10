@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
   state: {
     filterMovingVessels: false,
     vessels: [],
+    searchText: '',
     selectedVessel: null,
     selectedVesselPath: [],
     pathInMinutes: 120,
@@ -19,6 +20,9 @@ export const store = new Vuex.Store({
     },
     vessels: state => {
       return state.vessels
+    },
+    searchText: state => {
+      return state.searchText
     },
     selectedVessel: state => {
       return state.selectedVessel
@@ -39,6 +43,9 @@ export const store = new Vuex.Store({
     },
     fetchVessels: (state, vessels) => {
       state.vessels = vessels
+    },
+    setSearchText: (state, searchText) => {
+      state.searchText = searchText
     },
     selectVessel: (state, selectedVessel) => {
       state.selectedVessel = selectedVessel
@@ -66,9 +73,11 @@ export const store = new Vuex.Store({
           commit('fetchVessels', response.data)
         })
         .catch(err => {
-          console.log(err.message)
           commit('addError', err)
         })
+    },
+    setSearchText: ({ commit }, searchText) => {
+      commit('setSearchText', searchText)
     },
     selectVessel: ({ commit }, vessel) => {
       commit('selectVessel', vessel)

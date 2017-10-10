@@ -1,36 +1,13 @@
 <template>
   <div>
-    <v-navigation-drawer absolute persistent light v-model="drawer" overflow>
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://0.gravatar.com/avatar/ca7cfccfd2da4f5ef8fb60d2ab065052?s=200&d=mm&r=g" />
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>Bernt Anker</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
-        <v-list-tile v-for="item in items" :key="item.title" @click="">
-          <v-list-tile-action>
-            <v-icon>{{item.icon}}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar fixed class="amber darken-2" dark style="z-index: 5">
+    <v-toolbar fixed class="red darken-2" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Ais-Tracker</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn @click.stop="sheetVisable=!sheetVisable" class="btn--flat">
-        <v-icon left>settings</v-icon>Options</v-btn>
+      <v-icon left>settings</v-icon>Options</v-btn>
+      <search-field slot="extension" @searchTextChanged="setSearchText"></search-field>
+      <data-time-picker slot="extension"></data-time-picker>
     </v-toolbar>
     <div class="text-xs-center">
     <v-bottom-sheet v-model="sheetVisable">
@@ -48,7 +25,13 @@
 </template>
 
 <script>
+import SearchField from './SearchField'
+import DataTimePicker from './DateTimePicker'
 export default {
+  components: {
+    SearchField,
+    DataTimePicker
+  },
   name: 'app-header',
   data () {
     return {
@@ -77,6 +60,11 @@ export default {
       set (minutes) {
         this.$store.dispatch('setPathInMinutes', minutes)
       }
+    }
+  },
+  methods: {
+    setSearchText (text) {
+      this.$store.dispatch('setSearchText', text)
     }
   }
 }

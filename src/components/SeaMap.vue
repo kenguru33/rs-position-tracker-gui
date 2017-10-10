@@ -222,22 +222,27 @@
 <style>
   #maptype {
     top: 12px;
-    right: 12px
+    right: 12px;
+    z-index: 1;
   }
   #zoomup {
   bottom: 82px;
-  right: 12px
+  right: 12px;
+  z-index: 1;
 }
 #zoomdown {
   bottom: 32px;
-  right: 12px
+  right: 12px;
+  z-index: 1;
 }
 #bigMap {
   top: 12px;
-  left: 12px
+  left: 12px;
+  z-index: 1;
 }
 #followVessel {
   top: 72px;
-  right: 12px
+  right: 12px;
+  z-index: 1;
 }
 </style>
