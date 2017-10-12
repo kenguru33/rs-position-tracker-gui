@@ -1,8 +1,8 @@
 <template>
-  <v-app id="app-toolbar" toolbar>
+  <v-app id="app-toolbar">
     <app-header></app-header>
     <main>
-      <v-container fluid style="margin-top: 70px">
+      <v-container fluid class="mt-1">
         <!--v-router-->
         <router-view></router-view>
       </v-container>

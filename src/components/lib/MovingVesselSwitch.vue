@@ -17,7 +17,6 @@ export default {
 </script>
 <style scoped>
   .switch {
-    top: 9px;
-    height: 0;
+    top: 12px;
   }
 </style>

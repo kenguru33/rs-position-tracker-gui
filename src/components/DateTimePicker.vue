@@ -34,7 +34,7 @@
         max-width="290px"
         min-width="290px"
       >
-        <v-text-field class="mr-1 date-time-field"
+        <v-text-field class="date-time-field"
           slot="activator"
           label="time"
           v-model="time"
