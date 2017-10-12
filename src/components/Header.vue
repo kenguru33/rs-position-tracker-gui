@@ -1,13 +1,6 @@
 <template>
   <div>
-    <v-toolbar fixed class="red darken-2" dark>
-      <!--v-toolbar-side-icon @click.stop="extendedToolBar = !extendedToolBar"></v-toolbar-side-icon-->
-      <v-toolbar-title>Ais-Tracker</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click="sheetVisable=!sheetVisable">
-      <v-icon>settings</v-icon></v-btn>
-      <tool-bar slot="extension" v-if="extendedToolBar"></tool-bar>
-    </v-toolbar>
+    <Toolbar></Toolbar>
     <div class="text-xs-center">
     <v-bottom-sheet v-model="sheetVisable">
       <v-list>
@@ -22,14 +15,14 @@
 </template>
 
 <script>
-import SearchField from './SearchField'
+import SearchField from './lib/SearchField'
 import DataTimePicker from './DateTimePicker'
-import ToolBar from './ToolBar'
+import Toolbar from './lib/Toolbar'
 export default {
   components: {
     SearchField,
     DataTimePicker,
-    ToolBar
+    Toolbar
   },
   name: 'app-header',
   data () {
@@ -40,8 +33,7 @@ export default {
         { title: 'Historical View', icon: 'access_time' },
         { title: 'Location View', icon: 'location_on' }
       ],
-      sheetVisable: false,
-      extendedToolBar: true
+      sheetVisable: false
     }
   },
   computed: {
@@ -68,3 +60,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+
+</style>
