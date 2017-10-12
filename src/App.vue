@@ -1,8 +1,8 @@
 <template>
-  <v-app id="app-toolbar">
-    <app-header></app-header>
+  <v-app>
+    <app-toolbar></app-toolbar>
     <main>
-      <v-container fluid class="mt-1">
+      <v-container fluid class="mt-4">
         <!--v-router-->
         <router-view></router-view>
       </v-container>
@@ -19,19 +19,14 @@
 </template>
 
 <script>
-import AppHeader from './components/Header.vue'
+import AppToolbar from './components/lib/Toolbar.vue'
 let intervalId = null
 export default {
   components: {
-    AppHeader},
+    AppToolbar
+  },
   data () {
     return {
-      drawer: null,
-      items: [
-        { title: 'Live View', icon: 'gps_fixed' },
-        { title: 'Historical View', icon: 'access_time' },
-        { title: 'Location View', icon: 'location_on' }
-      ],
       snackbar: false
     }
   },
