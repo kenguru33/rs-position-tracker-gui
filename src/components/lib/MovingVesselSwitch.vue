@@ -1,5 +1,5 @@
 <template>
-  <v-layout row>
+  <v-layout row style="min-width: 200px">
   <v-switch class="switch" color="white" dark label="Moving Vessels" v-model="filterMovingVessels"></v-switch>
   </v-layout>
 </template>

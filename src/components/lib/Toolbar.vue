@@ -1,6 +1,6 @@
 <template>
   <v-toolbar dark fixed class="red">
-    <v-toolbar-side-icon v-if="showMenuButton" @click.stop=""></v-toolbar-side-icon>
+    <!--v-toolbar-side-icon v-if="showMenuButton" @click.stop=""></v-toolbar-side-icon-->
     <v-toolbar-title v-if="showTitle">Ais-Tracker</v-toolbar-title>
     <v-btn icon v-show="searchButtonClicked||filterButtonClicked" @click="clearClicked">
       <v-icon>arrow_back</v-icon>
@@ -15,15 +15,14 @@
     <v-btn icon v-show="showFilterButton" @click="filterButtonClicked=true">
       <v-badge overlay right color="purple" overlap>
         <v-icon :slot="filterActivated" dark>done</v-icon>
-        <v-icon>filter_list</v-icon>
+        <v-icon>directions_boat</v-icon>
       </v-badge>
     </v-btn>
-
     <search-field v-show="searchButtonClicked"></search-field>
     <moving-vessel-switch v-show="filterButtonClicked"></moving-vessel-switch>
     <v-spacer></v-spacer>
-    <v-btn icon v-show="showSettingsButton" @click="sheetVisable=!sheetVisable">
-      <v-icon>settings</v-icon>
+    <v-btn icon v-show="showSettingsButton" @click="sheetVisable=!sheetVisable" class="mr-0">
+      <v-icon>more_vert</v-icon>
     </v-btn>
     <div class="text-xs-center">
       <v-bottom-sheet v-model="sheetVisable">
@@ -41,6 +40,7 @@
   import SearchField from './SearchField'
   import MovingVesselSwitch from './MovingVesselSwitch'
   export default {
+    name: 'app-toolbar',
     components: {
       SearchField,
       MovingVesselSwitch
@@ -77,7 +77,7 @@
         this.showFilterButton = false
         this.showBackButton = true
         this.showMenuButton = false
-        this.showSettingsButton = false
+        this.showSettingsButton = true
         this.showTitle = false
       }
     },
@@ -111,3 +111,4 @@
     }
   }
 </script>
+
