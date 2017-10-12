@@ -7,8 +7,7 @@
 export default {
   data () {
     return {
-      focus: false,
-      searchText: ''
+      focus: false
     }
   },
   computed: {
@@ -17,20 +16,19 @@ export default {
         return 'clear'
       }
       return ''
+    },
+    searchText: {
+      get () { return this.$store.getters.searchText },
+      set (value) {
+        this.$store.dispatch('setSearchText', value)
+      }
     }
   },
   methods: {
     clearSearchText () {
-      this.searchText = ''
-    }
-  },
-  watch: {
-    'searchText': function () {
-      this.$store.commit('setSearchText', this.searchText)
+      this.$store.dispatch('setSearchText', '')
     }
   }
 }
 </script>
-<style scoped>
 
-</style>
