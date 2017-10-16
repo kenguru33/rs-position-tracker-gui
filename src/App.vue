@@ -94,7 +94,7 @@ export default {
               } else {
                 console.log(`add ${vessel.Ship_name} to halted vessel list`)
                 this.vesselStateInfo = `${vessel.Ship_name} has come to a halt!`
-                this.snackbarVesselImage = `/static/vessel-images/${vessel.MMSI}.jpg`
+                this.snackbarVesselImage = `static/vessel-images/${vessel.MMSI}.jpg`
                 this.snackbarVesselState = true
                 this.$store.dispatch('removeMovingVessel', vessel)
                 this.$store.dispatch('addHaltedVessel', vessel)
