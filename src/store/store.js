@@ -14,7 +14,9 @@ export const store = new Vuex.Store({
     selectedVessel: null,
     selectedVesselPath: [],
     pathInMinutes: 120,
-    errors: []
+    errors: [],
+    movingVessels: [],
+    haltedVessels: []
   },
   getters: {
     filterMovingVessels: state => {
@@ -37,6 +39,12 @@ export const store = new Vuex.Store({
     },
     errors: state => {
       return state.errors.pop()
+    },
+    movingVessels: state => {
+      return state.movingVessels
+    },
+    haltedVessels: state => {
+      return state.haltedVessels
     }
   },
   mutations: {
@@ -63,6 +71,30 @@ export const store = new Vuex.Store({
     },
     addError: (state, err) => {
       state.errors.push(err)
+    },
+    setMovingVessels: (state, vessels) => {
+      state.movingVessels = vessels
+    },
+    setHaltedVessels: (state, vessels) => {
+      state.haltedVessels = vessels
+    },
+    addMovingVessel: (state, vessel) => {
+      console.log('add moving vessel: ', vessel.Ship_name)
+      state.movingVessels.push(vessel)
+    },
+    removeMovingVessel: (state, vessel) => {
+      console.log('remove moving vessel: ', vessel.Ship_name)
+      const index = state.movingVessels.findIndex(v => { return v.MMSI === vessel.MMSI })
+      state.movingVessels.splice(index, 1)
+    },
+    addHaltedVessel: (state, vessel) => {
+      // console.log('add halted vessel: ', vessel.Ship_name)
+      state.haltedVessels.push(vessel)
+    },
+    removeHaltedVessel: (state, vessel) => {
+      // console.log('remove halted vessel: ', vessel.Ship_name)
+      const index = state.haltedVessels.findIndex(v => { return v.MMSI === vessel.MMSI })
+      state.haltedVessels.splice(index, 1)
     }
   },
   actions: {
@@ -100,6 +132,24 @@ export const store = new Vuex.Store({
     },
     addToPath: ({ commit }, position) => {
       commit('addToPath', position)
+    },
+    setMovingVessels: ({commit}, vessels) => {
+      commit('setMovingVessels', vessels)
+    },
+    setHaltedVessels: ({commit}, vessels) => {
+      commit('setHaltedVessels', vessels)
+    },
+    addMovingVessel: ({commit}, vessel) => {
+      commit('addMovingVessel', vessel)
+    },
+    removeMovingVessel: ({commit}, vessel) => {
+      commit('removeMovingVessel', vessel)
+    },
+    addHaltedVessel: ({commit}, vessel) => {
+      commit('addHaltedVessel', vessel)
+    },
+    removeHaltedVessel: ({commit}, vessel) => {
+      commit('removeHaltedVessel', vessel)
     }
   }
 })

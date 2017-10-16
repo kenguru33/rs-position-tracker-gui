@@ -49,7 +49,6 @@
       return {
         searchButtonClicked: false,
         filterButtonClicked: false,
-        showBackButtonClicked: false,
         showSearchButton: true,
         showFilterButton: true,
         showMenuButton: true,
@@ -62,12 +61,10 @@
       clearClicked () {
         this.searchButtonClicked = false
         this.filterButtonClicked = false
-        this.backButtonClicked = false
       },
       showAllButtons () {
         this.showSearchButton = true
         this.showFilterButton = true
-        this.showBackButton = false
         this.showMenuButton = true
         this.showSettingsButton = true
         this.showTitle = true
@@ -75,7 +72,6 @@
       hideAllButtons () {
         this.showSearchButton = false
         this.showFilterButton = false
-        this.showBackButton = true
         this.showMenuButton = false
         this.showSettingsButton = true
         this.showTitle = false
