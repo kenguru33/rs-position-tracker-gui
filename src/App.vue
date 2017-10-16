@@ -87,7 +87,7 @@ export default {
               if (this.isVesselMoving(vessel)) {
                 console.log(`add ${vessel.Ship_name} to moving vessel list`)
                 this.vesselStateInfo = `${vessel.Ship_name} is on the move!`
-                this.snackbarVesselImage = '/static/vessel-images/' + vessel.MMSI + '.jpg'
+                this.snackbarVesselImage = `static/vessel-images/${vessel.MMSI}.jpg`
                 this.snackbarVesselState = true
                 this.$store.dispatch('removeHaltedVessel', vessel)
                 this.$store.dispatch('addMovingVessel', vessel)
