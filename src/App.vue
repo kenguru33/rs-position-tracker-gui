@@ -109,3 +109,11 @@ export default {
   }
 }
 </script>
+<style>
+  @media only screen and (max-width: 599px) {
+    .container {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+</style>
