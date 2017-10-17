@@ -6,7 +6,13 @@ import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({
+    path: [
+      'searchText',
+      'filterMovingVessels',
+      'pathInMinutes'
+    ]
+  })],
   state: {
     filterMovingVessels: false,
     vessels: [],
