@@ -18,7 +18,7 @@
       @click="center=m.position"
       :icon="icon"
     ></gmap-marker>
-    <gmap-polyline :path="path"></gmap-polyline>
+    <gmap-polyline :path="path" :options="polyOptions"></gmap-polyline>
   </gmap-map>
     <v-btn
       class="blue" id="maptype"
@@ -164,6 +164,21 @@
           fillOpacity: 0.9,
           rotation: parseFloat(this.vessel.COG) - 180,
           scale: 0.5
+        }
+      },
+      polyOptions: function () {
+        return {
+          strokeColor: '#0026b3',
+          strokeOpacity: 1.0,
+          strokeWeight: 1,
+          geodesic: true,
+          icons: [{
+            icon: {
+              path: window.google.maps.SymbolPath.FORWARD_OPEN_ARROW,
+              scale: 1.5
+            },
+            repeat: '100px'
+          }]
         }
       }
     },
