@@ -10,6 +10,5 @@ export default new Router({
       name: 'VesselListView',
       component: VesselListView
     }
-  ],
-  mode: 'history'
+  ]
 })
