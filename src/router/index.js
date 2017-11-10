@@ -11,5 +11,5 @@ export default new Router({
       component: VesselListView
     }
   ],
-  mode: 'history'
+  mode: 'history' // configure redirect to index
 })
