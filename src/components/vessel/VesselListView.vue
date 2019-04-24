@@ -50,6 +50,7 @@
         return vessel.SOG > 1
       },
       matchSearchPattern: function (vessel) {
+        vessel.Ship_name = vessel.Ship_name || '*AIS SENDER IKKE NAVN'
         return vessel.Ship_name.toUpperCase().includes(this.$store.getters.searchText.toUpperCase())
       },
       selectVessel (vessel) {
