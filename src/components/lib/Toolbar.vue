@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar dark fixed class="green">
+  <v-toolbar dark fixed class="red">
     <!--v-toolbar-side-icon v-if="showMenuButton" @click.stop=""></v-toolbar-side-icon-->
     <v-toolbar-title v-if="showTitle">Ais-Tracker</v-toolbar-title>
     <v-btn icon v-show="searchButtonClicked||filterButtonClicked" @click="clearClicked">
